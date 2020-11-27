@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import { CalendarCell } from '../../common/CalendarCell';
+import Popup from '../../common/Popup';
 import styles from './Calendar.module.sass';
 
 class Calendar extends React.Component {
@@ -133,6 +134,7 @@ class Calendar extends React.Component {
                         }
                     })
                 }
+                <Popup />
             </div>
         );
     };
