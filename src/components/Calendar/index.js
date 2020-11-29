@@ -10,7 +10,10 @@ class Calendar extends React.Component {
         this.state = {
             monthData: [],
             displayCell: [],
-            activeCell: null
+            activeCell: null,
+            isVisiblePopup: false,
+            leftPopup: 0,
+            topPopup: 0
         };
 
         this.days = [
@@ -102,8 +105,30 @@ class Calendar extends React.Component {
         this.setState({displayCell: monthData});
     };
 
-    onActiveCell = activeCell => {
-        this.setState({activeCell});
+    onActiveCell = (e, activeCell) => {
+        this.setState({activeCell, isVisiblePopup: true});
+        const parent = e.target.parentNode.getBoundingClientRect();
+        const element = e.target.getBoundingClientRect();
+        console.log(e.target.offsetWidth)
+        if ((parent.right - (element.left + 464 + e.target.offsetWidth)) > 0) {
+            this.setState({leftPopup: element.left + 30 + e.target.offsetWidth});
+        } else {
+            this.setState({leftPopup: element.left - 464});
+        }
+
+        // error
+        if ((parent.bottom - (Math.abs(element.top) + e.target.offsetHeight)) > 0) {
+            this.setState({topPopup: Math.abs(element.top)});
+        } else {
+            this.setState({topPopup: element.bottom - e.target.offsetHeight});
+        }
+
+        console.log('parent', parent)
+        console.log('element', element)
+    };
+
+    onClosePopup = () => {
+        this.setState({isVisiblePopup: false, activeCell: null});
     };
 
     render() {
@@ -134,7 +159,12 @@ class Calendar extends React.Component {
                         }
                     })
                 }
-                <Popup />
+                <Popup 
+                    isVisible={this.state.isVisiblePopup}
+                    close={this.onClosePopup}
+                    left={this.state.leftPopup}
+                    top={this.state.topPopup}
+                />
             </div>
         );
     };

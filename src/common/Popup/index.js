@@ -18,10 +18,28 @@ export default class Popup extends React.Component {
         this.setState({[name]: value});
     };
 
+    clearValue = () => {
+        ['event', 'date', 'names', 'description'].forEach((name) => this.setState({[name]: ''}));
+    };
+
+    onClose = () => {
+        this.props.close();
+        this.clearValue();
+    };
+
     render() {
         return(
-            <div className={styles.wrapper}>
-                <button className={styles.cancel}><i className='fa fa-times'></i></button>
+            <div
+                className={`${styles.wrapper} ${this.props.isVisible ? styles.visible : ''}`}
+                style={{left: this.props.left + 'px', top: this.props.top + 'px'}}
+            >
+                <button
+                    className={styles.cancel}
+                    onClick={this.onClose}
+                >
+                    <i className='fa fa-times'></i>
+                </button>
+
                 <div className={styles.content}>
                     <Input
                         placeholder={'Событие'}
@@ -29,15 +47,21 @@ export default class Popup extends React.Component {
                         name={'event'}
                         onChange={this.onChange}
                     />
+
                     <Input
                         placeholder={'День, месяц, год'}
                         value={this.state.date}
                         name={'date'}
+                        onChange={this.onChange}
+                        mt={true}
                     />
+
                     <Input
                         placeholder={'Имена участников'}
                         value={this.state.names}
                         name={'names'}
+                        onChange={this.onChange}
+                        mt={true}
                     />
 
                     <textarea
@@ -45,11 +69,19 @@ export default class Popup extends React.Component {
                         placeholder='Описание'
                         value={this.state.description}
                         name={'description'}
+                        onChange={(e) => this.onChange(e.target.name, e.target.value)}
                     />
                 </div>
+
                 <div className={styles.wrapperButtons}>
-                    <ButtonIcon text={'Создать'}/>
-                    <ButtonIcon text={'Отменить'}/>
+                    <ButtonIcon
+                        text={'Создать'}
+                    />
+
+                    <ButtonIcon
+                        text={'Отменить'}
+                        onClick={this.onClose}
+                    />
                 </div>
             </div>
         );
