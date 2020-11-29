@@ -14,6 +14,12 @@ export default class Popup extends React.Component {
         };
     };
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.left !== this.props.left || prevProps.top !== this.props.top) {
+            this.clearValue();
+        }
+    };
+
     onChange = (name, value) => {
         this.setState({[name]: value});
     };
@@ -31,7 +37,7 @@ export default class Popup extends React.Component {
         return(
             <div
                 className={`${styles.wrapper} ${this.props.isVisible ? styles.visible : ''}`}
-                style={{left: this.props.left + 'px', top: this.props.top + 'px'}}
+                style={{left: this.props.left + 'px', top: this.props.top}}
             >
                 <button
                     className={styles.cancel}

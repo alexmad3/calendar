@@ -106,25 +106,27 @@ class Calendar extends React.Component {
     };
 
     onActiveCell = (e, activeCell) => {
-        this.setState({activeCell, isVisiblePopup: true});
-        const parent = e.target.parentNode.getBoundingClientRect();
-        const element = e.target.getBoundingClientRect();
-        console.log(e.target.offsetWidth)
-        if ((parent.right - (element.left + 464 + e.target.offsetWidth)) > 0) {
-            this.setState({leftPopup: element.left + 30 + e.target.offsetWidth});
-        } else {
-            this.setState({leftPopup: element.left - 464});
+        if (activeCell !== this.state.activeCell) {
+            this.setState({activeCell, isVisiblePopup: true});
+            const parent = e.target.parentNode.getBoundingClientRect();
+            const element = e.target.getBoundingClientRect();
+            console.log(e.target.offsetWidth)
+            if ((parent.right - (element.left + 464 + e.target.offsetWidth)) > 0) {
+                this.setState({leftPopup: element.left + 30 + e.target.offsetWidth});
+            } else {
+                this.setState({leftPopup: element.left - 464});
+            }
+    
+            // error
+            if ((parent.bottom - (element.top + (e.target.offsetHeight - 250))) > 0) {
+                this.setState({topPopup: (Math.abs(parent.top) - 208) + element.top });
+            } else {
+                this.setState({topPopup: element.bottom - e.target.offsetHeight});
+            }
+    
+            console.log('parent', parent)
+            console.log('element', element)
         }
-
-        // error
-        if ((parent.bottom - (Math.abs(element.top) + e.target.offsetHeight)) > 0) {
-            this.setState({topPopup: Math.abs(element.top)});
-        } else {
-            this.setState({topPopup: element.bottom - e.target.offsetHeight});
-        }
-
-        console.log('parent', parent)
-        console.log('element', element)
     };
 
     onClosePopup = () => {
