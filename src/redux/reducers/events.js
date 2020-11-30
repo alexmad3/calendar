@@ -5,12 +5,14 @@ const initialState = {
         title: 'Встреча',
         date: 1605387600000,
         names: 'Влад, Педро',
-        description: 'Четкая встреча'
+        description: 'Четкая встреча',
+        id: 1
     }, {
         title: 'Встреча 2',
         date: 1605387500000,
         names: 'Влад, Педро',
-        description: 'Четкая встреча 2'
+        description: 'Четкая встреча 2',
+        id: 2
     }]
 };
 

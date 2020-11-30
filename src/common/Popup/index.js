@@ -16,12 +16,6 @@ class Popup extends React.Component {
         };
     };
 
-    componentDidUpdate(prevProps) {
-        if (prevProps.position !== this.props.position) {
-            this.clearValue();
-        }
-    };
-
     onChange = (name, value) => {
         this.setState({[name]: value});
     };

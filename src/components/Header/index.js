@@ -8,7 +8,7 @@ function Header() {
             <div className={styles.container}>
                 <div className={styles.wrapperButtons}>
                     <Button text={'Добавить'} />
-                    <Button text={'Обновить'} />
+                    <Button text={'Обновить'} onClick={() => window.location.reload()} />
                 </div>
                 <Search />
             </div>
