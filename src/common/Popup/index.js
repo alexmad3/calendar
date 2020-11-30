@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { visiblePopup, setActiveCell } from '../../redux/actions/popup';
 import { ButtonIcon } from '../ButtonIcon';
 import { Input } from '../Input';
 import styles from './Popup.module.sass';
 
-export default class Popup extends React.Component {
+class Popup extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,7 +17,7 @@ export default class Popup extends React.Component {
     };
 
     componentDidUpdate(prevProps) {
-        if (prevProps.left !== this.props.left || prevProps.top !== this.props.top) {
+        if (prevProps.position !== this.props.position) {
             this.clearValue();
         }
     };
@@ -29,7 +31,8 @@ export default class Popup extends React.Component {
     };
 
     onClose = () => {
-        this.props.close();
+        this.props.visiblePopup(false);
+        this.props.setActiveCell(null);
         this.clearValue();
     };
 
@@ -37,8 +40,12 @@ export default class Popup extends React.Component {
         return(
             <div
                 className={`${styles.wrapper} ${this.props.isVisible ? styles.visible : ''}`}
-                style={{left: this.props.left + 'px', top: this.props.top}}
+                style={{left: this.props.position.wrapperLeft + 'px', top: this.props.position.wrapperTop + 'px'}}
             >
+                <div className={
+                    `${styles.arrow} ${styles[this.props.position.horizontalDirection]} ${styles[this.props.position.verticalDirection]}`
+                }></div>
+    
                 <button
                     className={styles.cancel}
                     onClick={this.onClose}
@@ -93,3 +100,16 @@ export default class Popup extends React.Component {
         );
     }
 };
+
+const state = (state) => {
+    return {
+        position: state.popup.position
+    };
+};
+
+const dispatch = {
+    visiblePopup,
+    setActiveCell
+};
+
+export default connect(state, dispatch)(Popup);

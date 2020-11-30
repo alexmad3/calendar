@@ -1,6 +1,8 @@
 import { combineReducers } from "redux";
-import { eventsReducers } from "./eventsReducer";
+import { events } from "./reducers/events";
+import { popup } from "./reducers/popup";
 
 export const rootReducer = combineReducers({
-    events: eventsReducers
+    events,
+    popup
 });

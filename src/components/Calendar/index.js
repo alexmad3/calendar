@@ -1,7 +1,7 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { CalendarCell } from '../../common/CalendarCell';
-import Popup from '../../common/Popup';
+import { setActiveCell, setPositionPopup, visiblePopup } from '../../redux/actions/popup';
 import styles from './Calendar.module.sass';
 
 class Calendar extends React.Component {
@@ -10,10 +10,6 @@ class Calendar extends React.Component {
         this.state = {
             monthData: [],
             displayCell: [],
-            activeCell: null,
-            isVisiblePopup: false,
-            leftPopup: 0,
-            topPopup: 0
         };
 
         this.days = [
@@ -34,7 +30,8 @@ class Calendar extends React.Component {
     componentDidUpdate(prevProps) {
         if (prevProps.date !== this.props.date) {
             this.calendarCalculation();
-            this.setState({activeCell: null});
+            this.props.visiblePopup(false);
+            this.props.setActiveCell(null);
         }
     }
 
@@ -105,32 +102,46 @@ class Calendar extends React.Component {
         this.setState({displayCell: monthData});
     };
 
-    onActiveCell = (e, activeCell) => {
-        if (activeCell !== this.state.activeCell) {
-            this.setState({activeCell, isVisiblePopup: true});
-            const parent = e.target.parentNode.getBoundingClientRect();
-            const element = e.target.getBoundingClientRect();
-            console.log(e.target.offsetWidth)
-            if ((parent.right - (element.left + 464 + e.target.offsetWidth)) > 0) {
-                this.setState({leftPopup: element.left + 30 + e.target.offsetWidth});
-            } else {
-                this.setState({leftPopup: element.left - 464});
-            }
-    
-            // error
-            if ((parent.bottom - (element.top + (e.target.offsetHeight - 250))) > 0) {
-                this.setState({topPopup: (Math.abs(parent.top) - 208) + element.top });
-            } else {
-                this.setState({topPopup: element.bottom - e.target.offsetHeight});
-            }
-    
-            console.log('parent', parent)
-            console.log('element', element)
-        }
-    };
+    setActiveCell = (e, activeCell, number) => {
+        if (activeCell !== this.props.activeCell) {
+            this.props.onClickCell(true);
+            this.props.setActiveCell(activeCell);
 
-    onClosePopup = () => {
-        this.setState({isVisiblePopup: false, activeCell: null});
+            const parent = e.target.parentNode.getBoundingClientRect(),
+                element = e.target.getBoundingClientRect();
+
+            let wrapperTop,
+                wrapperLeft,
+                horizontalDirection,
+                verticalDirection,
+                lines = document.querySelector(`.${styles.calendar}`).children.length / 7;
+
+            if ((parent.right - (element.left + 464 + e.target.offsetWidth)) > 0) {
+                wrapperLeft = element.left + 30 + e.target.offsetWidth;
+                horizontalDirection = 'left';
+            } else {
+                wrapperLeft = element.left - 464;
+                horizontalDirection = 'right';
+            }
+    
+            if (number / 7 <= lines - 2) {
+                if (number % 7 === 0) {
+                    wrapperTop = Math.floor(number / 7) * 250 + 208 - 250;
+                } else {
+                    wrapperTop = Math.floor(number / 7) * 250 + 208;
+                }
+                verticalDirection = 'top';
+            } else {
+                if (number % 7 === 0) {
+                    wrapperTop = (Math.floor(number / 7) * 250 + 208) - (514 - 250) - 250;
+                } else {
+                    wrapperTop = (Math.floor(number / 7) * 250 + 208) - (514 - 250);
+                }
+                verticalDirection = 'bottom';
+            }
+
+            this.props.setPositionPopup({wrapperTop, wrapperLeft, horizontalDirection, verticalDirection});
+        }
     };
 
     render() {
@@ -144,8 +155,9 @@ class Calendar extends React.Component {
                                         title={el.title}
                                         names={el.names}
                                         id={+el.date}
-                                        activeCell={this.state.activeCell}
-                                        onActive={this.onActiveCell}
+                                        activeCell={this.props.activeCell}
+                                        onActive={this.setActiveCell}
+                                        number={i + 1}
                                         key={i} 
                                     />
                         } else {
@@ -154,28 +166,30 @@ class Calendar extends React.Component {
                                         title={el.title}
                                         names={el.names}
                                         id={+el.date}
-                                        activeCell={this.state.activeCell}
-                                        onActive={this.onActiveCell}
+                                        activeCell={this.props.activeCell}
+                                        onActive={this.setActiveCell}
+                                        number={i + 1}
                                         key={i}
                                     />
                         }
                     })
                 }
-                <Popup 
-                    isVisible={this.state.isVisiblePopup}
-                    close={this.onClosePopup}
-                    left={this.state.leftPopup}
-                    top={this.state.topPopup}
-                />
             </div>
         );
     };
 };
 
-const mapStateToProps = state => {
+const state = state => {
     return {
-        events: state.events.events
+        events: state.events.events,
+        activeCell: state.popup.activeCell
     };
 };
 
-export default connect(mapStateToProps, null)(Calendar);
+const dispatch = {
+    setActiveCell,
+    setPositionPopup,
+    visiblePopup
+};
+
+export default connect(state, dispatch)(Calendar);

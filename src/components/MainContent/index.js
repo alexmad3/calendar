@@ -1,6 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { ButtonIcon } from '../../common/ButtonIcon';
 import Calendar from '../Calendar';
+import Popup from '../../common/Popup';
+import { visiblePopup } from '../../redux/actions/popup';
 import styles from './MainContent.module.sass';
 
 class MainContent extends React.Component {
@@ -50,6 +53,10 @@ class MainContent extends React.Component {
         this.setState({currentDate: new Date()}, () => this.setDisplayDate());
     };
 
+    onClickCell = isVisible => {
+        this.props.visiblePopup(isVisible);
+    };
+
     render() {
         return(
             <div className={styles.container}>
@@ -59,10 +66,27 @@ class MainContent extends React.Component {
                     <ButtonIcon icon='fa fa-caret-right' onClick={() => this.changeMonth('+')} />
                     <ButtonIcon text='Сегодня' onClick={this.currentMonth} />
                 </div>
-                <Calendar date={this.state.currentDate} />
+                <Calendar
+                    date={this.state.currentDate}
+                    onClickCell={this.onClickCell}
+                />
+                <Popup 
+                    isVisible={this.props.isVisiblePopup}
+                    close={this.onClickCell}
+                />
             </div>
         );
     };
 }
 
-export default MainContent;
+const state = state => {
+    return {
+        isVisiblePopup: state.popup.isVisible
+    };
+};
+
+const dispatch = {
+    visiblePopup
+};
+
+export default connect(state, dispatch)(MainContent);

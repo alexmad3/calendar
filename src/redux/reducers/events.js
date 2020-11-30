@@ -1,4 +1,4 @@
-import { CREATE_EVENT } from "./types";
+import { CREATE_EVENT } from "../types";
 
 const initialState = {
     events: [{
@@ -14,10 +14,10 @@ const initialState = {
     }]
 };
 
-export const eventsReducers = (state = initialState, action) => {
+export const events = (state = initialState, action) => {
     switch (action.type) {
         case CREATE_EVENT:
-            return {...state, events: [...state.events, action.payload]}
-        default: return state
+            return {...state, events: [...state.events, action.payload]};
+        default: return state;
     };
-}
+};
