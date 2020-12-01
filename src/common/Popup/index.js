@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { visiblePopup, setActiveCell } from '../../redux/actions/popup';
-import { createEvent } from '../../redux/actions/events';
+import { createEvent, editEvent, removeEvent } from '../../redux/actions/events';
+import { getIdEvent } from '../../redux/actions/calendar';
 import { ButtonIcon } from '../ButtonIcon';
 import { Input } from '../Input';
 import styles from './Popup.module.sass';
@@ -32,8 +33,26 @@ class Popup extends React.Component {
             'Ноября',
             'Декабря'
         ];
+    };
 
-        this.errors = true;
+    componentDidMount = () => {
+        this.updateStateInputs();
+    };
+
+    componentDidUpdate = (prevProps) => {
+        if (prevProps.idEvent !== this.props.idEvent) {
+            this.updateStateInputs();
+            ['eventEmpty', 'dateEmpty', 'dateError'].forEach(name => this.setState({[name]: false}));
+        }
+    };
+
+    updateStateInputs = () => {
+        if (this.props.idEvent) {
+            let event = this.props.events.find(event => event.id === this.props.idEvent);
+            this.setState({event: event.title, date: `${new Date(event.date).getDate()}, ${new Date(event.date).getMonth() + 1}, ${new Date(event.date).getFullYear()}`, names: event.names, description: event.description});
+        } else {
+            this.setState({event: '', date: '', names: '', description: ''});
+        }
     };
 
     onChange = (name, value) => {
@@ -42,6 +61,7 @@ class Popup extends React.Component {
 
     clearValue = () => {
         ['event', 'date', 'names', 'description'].forEach(name => this.setState({[name]: ''}));
+        ['eventEmpty', 'dateEmpty', 'dateError'].forEach(name => this.setState({[name]: false}));
     };
 
     parseDate = date => {
@@ -90,17 +110,9 @@ class Popup extends React.Component {
 
     errorDate = () => {
         if (this.parseDate(this.state.date)) {
-            this.setState({dateError: false}, () => this.checkErrors());
+            this.setState({dateError: false});
         } else {
-            this.setState({dateError: true}, () => this.checkErrors());
-        }
-    };
-
-    checkErrors = () => {
-        if (!this.state.eventEmpty && !this.state.dateError && !this.state.dateEmpty) {
-            this.errors = false;
-        } else {
-            this.errors = true;
+            this.setState({dateError: true});
         }
     };
 
@@ -108,7 +120,8 @@ class Popup extends React.Component {
         this.checkEmptiness('event', 'eventEmpty');
         this.checkEmptiness('date', 'dateEmpty');
         this.errorDate();
-        if (!this.state.eventEmpty && !this.state.dateEmpty && !this.state.dateError && !this.errors) {
+
+        if (!this.state.eventEmpty && !this.state.dateEmpty && !this.state.dateError && this.state.event.trim() && this.state.date.trim()) {
             let id = 0;
 
             this.props.events.forEach(event => {
@@ -127,6 +140,7 @@ class Popup extends React.Component {
             this.props.visiblePopup(false);
             this.props.setActiveCell(null);
             this.clearValue();
+            this.props.getIdEvent(null);
         }
     };
 
@@ -134,6 +148,35 @@ class Popup extends React.Component {
         this.props.visiblePopup(false);
         this.props.setActiveCell(null);
         this.clearValue();
+        this.props.getIdEvent(null);
+    };
+
+    onEdit = () => {
+        this.checkEmptiness('event', 'eventEmpty');
+        this.checkEmptiness('date', 'dateEmpty');
+        this.errorDate();
+
+        if (!this.state.eventEmpty && !this.state.dateEmpty && !this.state.dateError && this.state.event.trim() && this.state.date.trim()) {
+            this.props.editEvent({
+                id: this.props.idEvent,
+                title: this.state.event,
+                date: this.parseDate(this.state.date),
+                names: this.state.names,
+                description: this.state.description,
+            });
+            this.props.visiblePopup(false);
+            this.props.setActiveCell(null);
+            this.clearValue();
+            this.props.getIdEvent(null);
+        }
+    };
+
+    removeEvent = () => {
+        this.props.removeEvent(this.props.idEvent);
+        this.props.visiblePopup(false);
+        this.props.setActiveCell(null);
+        this.clearValue();
+        this.props.getIdEvent(null);
     };
 
     render() {
@@ -198,17 +241,35 @@ class Popup extends React.Component {
                 </div>
 
 
-                <div className={styles.wrapperButtons}>
-                    <ButtonIcon
-                        text={'Создать'}
-                        onClick={this.onSaveEvent}
-                    />
+                {
+                    !this.props.idEvent &&
+                        <div className={styles.wrapperButtons}>
+                            <ButtonIcon
+                                text={'Создать'}
+                                onClick={this.onSaveEvent}
+                            />
 
-                    <ButtonIcon
-                        text={'Отменить'}
-                        onClick={this.onClose}
-                    />
-                </div>
+                            <ButtonIcon
+                                text={'Отменить'}
+                                onClick={this.onClose}
+                            />
+                        </div>
+                }
+
+                {
+                    this.props.idEvent &&
+                        <div className={styles.wrapperButtons}>
+                            <ButtonIcon
+                                text={'Редактировать'}
+                                onClick={this.onEdit}
+                            />
+
+                            <ButtonIcon
+                                text={'Удалить'}
+                                onClick={this.removeEvent}
+                            />
+                        </div>
+                }
             </div>
         );
     }
@@ -220,14 +281,18 @@ const state = (state) => {
         events: state.events.events,
         position: state.popup.position,
         months: state.calendar.months,
-        currentDate: state.calendar.currentDate
+        currentDate: state.calendar.currentDate,
+        idEvent: state.calendar.idEvent
     };
 };
 
 const dispatch = {
     visiblePopup,
     setActiveCell,
-    createEvent
+    createEvent,
+    getIdEvent,
+    editEvent,
+    removeEvent
 };
 
 export default connect(state, dispatch)(Popup);

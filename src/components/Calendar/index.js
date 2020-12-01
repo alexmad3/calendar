@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { CalendarCell } from '../../common/CalendarCell';
 import { setActiveCell, setPositionPopup, visiblePopup } from '../../redux/actions/popup';
+import { getIdEvent } from '../../redux/actions/calendar';
+import { setEvents } from '../../redux/actions/events';
 import styles from './Calendar.module.sass';
 
 class Calendar extends React.Component {
@@ -25,6 +27,7 @@ class Calendar extends React.Component {
 
     componentDidMount() {
         this.calendarCalculation();
+        this.props.setEvents();
     };
 
     componentDidUpdate(prevProps) {
@@ -53,7 +56,8 @@ class Calendar extends React.Component {
                     monthData.push({
                         date: new Date(new Date(year, month, (i * (-1)) + 2 )),
                         title: this.props.events[j].title,
-                        names: this.props.events[j].names
+                        names: this.props.events[j].names,
+                        idEvent: this.props.events[j].id
                     });
                     continue prevDays;
                 }
@@ -73,7 +77,8 @@ class Calendar extends React.Component {
                         monthData.push({
                             date: new Date(new Date(year, month, i)),
                             title: this.props.events[j].title,
-                            names: this.props.events[j].names
+                            names: this.props.events[j].names,
+                            idEvent: this.props.events[j].id
                         });
                         continue presDays;
                     }
@@ -90,7 +95,8 @@ class Calendar extends React.Component {
                         monthData.push({
                             date: new Date(new Date(year, month + 1, i)),
                             title: this.props.events[j].title,
-                            names: this.props.events[j].names
+                            names: this.props.events[j].names,
+                            idEvent: this.props.events[j].id
                         });
                         continue futDays;
                     }
@@ -102,8 +108,8 @@ class Calendar extends React.Component {
         this.setState({displayCell: monthData});
     };
 
-    setActiveCell = (e, activeCell, number) => {
-        if (activeCell !== this.props.activeCell) {
+    setActiveCell = (e, activeCell, number, idEvent = null) => {
+        if (activeCell !== this.props.activeCell || idEvent) {
             this.props.onClickCell(true);
             this.props.setActiveCell(activeCell);
 
@@ -141,6 +147,7 @@ class Calendar extends React.Component {
             }
 
             this.props.setPositionPopup({wrapperTop, wrapperLeft, horizontalDirection, verticalDirection});
+            this.props.getIdEvent(idEvent);
         }
     };
 
@@ -158,7 +165,8 @@ class Calendar extends React.Component {
                                         activeCell={this.props.activeCell}
                                         onActive={this.setActiveCell}
                                         number={i + 1}
-                                        key={i} 
+                                        idEvent={el.idEvent}
+                                        key={i}
                                     />
                         } else {
                             return <CalendarCell
@@ -169,6 +177,7 @@ class Calendar extends React.Component {
                                         activeCell={this.props.activeCell}
                                         onActive={this.setActiveCell}
                                         number={i + 1}
+                                        idEvent={el.idEvent}
                                         key={i}
                                     />
                         }
@@ -189,7 +198,9 @@ const state = state => {
 const dispatch = {
     setActiveCell,
     setPositionPopup,
-    visiblePopup
+    visiblePopup,
+    getIdEvent,
+    setEvents
 };
 
 export default connect(state, dispatch)(Calendar);

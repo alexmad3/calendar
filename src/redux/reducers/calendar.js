@@ -1,4 +1,4 @@
-import {SET_CURRENT_DATE} from '../types';
+import {SET_CURRENT_DATE, GET_ID_EVENT} from '../types';
 
 const initialState = {
     months: [
@@ -15,13 +15,18 @@ const initialState = {
         'Ноябрь',
         'Декабрь'
     ],
-    currentDate: null
+    currentDate: null,
+    idEvent: null
 };
 
 export const calendar = (state = initialState, action) => {
     switch (action.type) {
         case SET_CURRENT_DATE:
             return {...state, currentDate: action.payload};
+
+        case GET_ID_EVENT:
+            return {...state, idEvent: action.payload};
+
         default: return state;
     };
 };
