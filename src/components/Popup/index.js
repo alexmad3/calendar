@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { visiblePopup, setActiveCell } from '../../redux/actions/popup';
 import { createEvent, editEvent, removeEvent } from '../../redux/actions/events';
 import { getIdEvent } from '../../redux/actions/calendar';
-import { ButtonIcon } from '../ButtonIcon';
-import { Input } from '../Input';
+import { ButtonIcon } from '../../common/ButtonIcon';
+import { Input } from '../../common/Input';
 import styles from './Popup.module.sass';
 
 class Popup extends React.Component {
@@ -19,20 +19,6 @@ class Popup extends React.Component {
             dateEmpty: false,
             dateError: false
         };
-        this.months = [
-            'Января',
-            'Февраля',
-            'Марта',
-            'Апреля',
-            'Мая',
-            'Июня',
-            'Июля',
-            'Августа',
-            'Сентября',
-            'Октября',
-            'Ноября',
-            'Декабря'
-        ];
     };
 
     componentDidMount = () => {
@@ -82,7 +68,7 @@ class Popup extends React.Component {
             for (let i = 0; i < this.props.months.length; i++) {
                 if (
                     (this.props.months[i].toLowerCase() === parseDate[1].toLowerCase().trim()) ||
-                    (this.months[i].toLowerCase() === parseDate[1].toLowerCase().trim())
+                    (this.props.otherMonths[i].toLowerCase() === parseDate[1].toLowerCase().trim())
                 ) {
                     parseDate[1] = i + 1;
                     break;
@@ -281,6 +267,7 @@ const state = (state) => {
         events: state.events.events,
         position: state.popup.position,
         months: state.calendar.months,
+        otherMonths: state.calendar.otherMonths,
         currentDate: state.calendar.currentDate,
         idEvent: state.calendar.idEvent
     };

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ButtonIcon } from '../../common/ButtonIcon';
 import Calendar from '../Calendar';
-import Popup from '../../common/Popup';
+import Popup from '../Popup';
 import { visiblePopup } from '../../redux/actions/popup';
 import { setCurrentDate } from '../../redux/actions/calendar';
 import styles from './MainContent.module.sass';

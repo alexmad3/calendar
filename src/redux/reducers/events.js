@@ -32,7 +32,7 @@ export const events = (state = initialState, action) => {
             return {...state, events: state.events.filter(event => event.id !== action.payload) };
 
         case SET_EVENTS:
-            return {...state, events: JSON.parse(localStorage.getItem('events'))};
+            return {...state, events: (JSON.parse(localStorage.getItem('events')) || [])};
 
         default: return state;
     };

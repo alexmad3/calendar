@@ -1,4 +1,4 @@
-import { Input } from '../Input';
+import { Input } from '../../common/Input';
 import styles from './Search.module.sass';
 
 export const Search = (props) => {

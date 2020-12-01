@@ -1,0 +1,46 @@
+.wrapper
+    width: 25rem
+    height: 10rem   
+    background: white
+    border: 1px solid #bebfbf
+    border-radius: 3px
+    position: absolute
+    top: 9rem
+    display: none
+    flex-direction: column
+    padding: 1rem
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.35)
+
+.active
+    display: flex
+
+.arrow
+    border: solid #bebfbf
+    border-width: 0 1px 1px 0
+    padding: 7px
+    position: relative
+    background: white
+    width: 0px
+    transform: rotate(-135deg)
+    top: -25px
+    left: 15px
+
+.cancel
+    background: transparent
+    border: none
+    cursor: pointer
+    outline: none
+    font-size: 1rem
+    color: #bebfbf
+    align-self: flex-end
+
+    &:hover
+        color: #636363
+
+.content
+    padding: 1rem 1.5rem
+
+.wrapperButton
+    display: flex
+    height: 100%
+    align-items: flex-end
