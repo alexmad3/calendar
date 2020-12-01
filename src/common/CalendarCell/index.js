@@ -13,7 +13,7 @@ export const CalendarCell = (props) => {
             {
                 props.title &&
                     <>
-                        <p className={styles.title}>{props.title}</p>
+                        <h3>{props.title}</h3>
                         <p>{props.names}</p>
                     </>
             }

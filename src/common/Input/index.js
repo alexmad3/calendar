@@ -4,11 +4,12 @@ import styles from './Input.module.sass';
 export const Input = (props) => {
     return(
         <input
-            className={`${styles.input} ${props.mt ? styles.mt : ''}`}
+            className={`${styles.input} ${props.mt ? styles.mt : ''} ${props.isError ? styles.error : ''}`}
             placeholder={props.placeholder}
             value={props.value}
             name={props.name}
             onChange={(e) => props.onChange(props.name, e.target.value)}
+            onBlur={props.onBlur}
         />
     );
 };

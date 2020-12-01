@@ -28,7 +28,7 @@ class Calendar extends React.Component {
     };
 
     componentDidUpdate(prevProps) {
-        if (prevProps.date !== this.props.date) {
+        if (prevProps.date !== this.props.date || prevProps.events !== this.props.events) {
             this.calendarCalculation();
             this.props.visiblePopup(false);
             this.props.setActiveCell(null);

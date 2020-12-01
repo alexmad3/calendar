@@ -4,6 +4,7 @@ import { ButtonIcon } from '../../common/ButtonIcon';
 import Calendar from '../Calendar';
 import Popup from '../../common/Popup';
 import { visiblePopup } from '../../redux/actions/popup';
+import { setCurrentDate } from '../../redux/actions/calendar';
 import styles from './MainContent.module.sass';
 
 class MainContent extends React.Component {
@@ -13,20 +14,6 @@ class MainContent extends React.Component {
             currentDate: new Date(),
             displayDate: ''
         };
-        this.months = [
-            'Январь',
-            'Февраль',
-            'Март',
-            'Апрель',
-            'Май',
-            'Июнь',
-            'Июль',
-            'Август',
-            'Сентябрь',
-            'Октябрь',
-            'Ноябрь',
-            'Декабрь'
-        ];
     };
 
     componentDidMount() {
@@ -34,9 +21,10 @@ class MainContent extends React.Component {
     };
 
     setDisplayDate = () => {
+        this.props.setCurrentDate(this.state.currentDate);
         let date = new Date(this.state.currentDate);
         this.setState({
-            displayDate: `${this.months[date.getMonth()]} ${date.getFullYear()}`
+            displayDate: `${this.props.months[date.getMonth()]} ${date.getFullYear()}`
         });
     };
 
@@ -81,12 +69,14 @@ class MainContent extends React.Component {
 
 const state = state => {
     return {
-        isVisiblePopup: state.popup.isVisible
+        isVisiblePopup: state.popup.isVisible,
+        months: state.calendar.months
     };
 };
 
 const dispatch = {
-    visiblePopup
+    visiblePopup,
+    setCurrentDate
 };
 
 export default connect(state, dispatch)(MainContent);
