@@ -36,7 +36,7 @@ class Header extends React.Component {
 
                     <ShortPopup
                         active={this.state.activePopup}
-                        onActive={() => this.setState({activePopup: false})}
+                        onVisible={() => this.setState({activePopup: false})}
                     />
 
                     <Search />

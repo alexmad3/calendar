@@ -17,7 +17,9 @@ class Popup extends React.Component {
             description: '',
             eventEmpty: false,
             dateEmpty: false,
-            dateError: false
+            dateError: false,
+            eventExists: false,
+            eventExistsId: ''
         };
     };
 
@@ -28,16 +30,28 @@ class Popup extends React.Component {
     componentDidUpdate = (prevProps) => {
         if (prevProps.idEvent !== this.props.idEvent) {
             this.updateStateInputs();
-            ['eventEmpty', 'dateEmpty', 'dateError'].forEach(name => this.setState({[name]: false}));
+            ['eventEmpty', 'dateEmpty', 'dateError', 'eventExists'].forEach(name => this.setState({[name]: false}));
         }
     };
 
     updateStateInputs = () => {
         if (this.props.idEvent) {
             let event = this.props.events.find(event => event.id === this.props.idEvent);
-            this.setState({event: event.title, date: `${new Date(event.date).getDate()}, ${new Date(event.date).getMonth() + 1}, ${new Date(event.date).getFullYear()}`, names: event.names, description: event.description});
+            this.setState({
+                event: event.title,
+                date: `${new Date(event.date).getDate()}, ${new Date(event.date).getMonth() + 1}, ${new Date(event.date).getFullYear()}`,
+                names: event.names,
+                description: event.description,
+                eventExistsId: ''
+            });
         } else {
-            this.setState({event: '', date: '', names: '', description: ''});
+            this.setState({
+                event: '',
+                date: '',
+                names: '',
+                description: '',
+                eventExistsId: ''
+            });
         }
     };
 
@@ -46,8 +60,8 @@ class Popup extends React.Component {
     };
 
     clearValue = () => {
-        ['event', 'date', 'names', 'description'].forEach(name => this.setState({[name]: ''}));
-        ['eventEmpty', 'dateEmpty', 'dateError'].forEach(name => this.setState({[name]: false}));
+        ['event', 'date', 'names', 'description', 'eventExistsId'].forEach(name => this.setState({[name]: ''}));
+        ['eventEmpty', 'dateEmpty', 'dateError', 'eventExists'].forEach(name => this.setState({[name]: false}));
     };
 
     parseDate = date => {
@@ -102,12 +116,35 @@ class Popup extends React.Component {
         }
     };
 
+    checkedEventExists = () => {
+        if (!this.state.dateError) {
+            let date = this.parseDate(this.state.date);
+    
+            for (let i = 0; i < this.props.events.length; i++) {
+                if (date === this.props.events[i].date && this.props.idEvent !== this.props.events[i].id) {
+                    this.setState({eventExistsId: this.props.events[i].id, eventExists: true});
+                    return;
+                }
+            }
+
+            this.setState({eventExistsId: '', eventExists: false});
+        }
+    };
+
     onSaveEvent = () => {
         this.checkEmptiness('event', 'eventEmpty');
         this.checkEmptiness('date', 'dateEmpty');
         this.errorDate();
+        this.checkedEventExists();
 
-        if (!this.state.eventEmpty && !this.state.dateEmpty && !this.state.dateError && this.state.event.trim() && this.state.date.trim()) {
+        if (
+            !this.state.eventEmpty &&
+            !this.state.dateEmpty &&
+            !this.state.dateError &&
+            !this.state.eventExists &&
+            this.state.event.trim() &&
+            this.state.date.trim()
+        ) {
             let id = 0;
 
             this.props.events.forEach(event => {
@@ -141,10 +178,46 @@ class Popup extends React.Component {
         this.checkEmptiness('event', 'eventEmpty');
         this.checkEmptiness('date', 'dateEmpty');
         this.errorDate();
+        this.checkedEventExists();
 
-        if (!this.state.eventEmpty && !this.state.dateEmpty && !this.state.dateError && this.state.event.trim() && this.state.date.trim()) {
+        if (
+            !this.state.eventEmpty &&
+            !this.state.dateEmpty &&
+            !this.state.dateError &&
+            !this.state.eventExists &&
+            this.state.event.trim() &&
+            this.state.date.trim()
+        ) {
+            
             this.props.editEvent({
                 id: this.props.idEvent,
+                title: this.state.event,
+                date: this.parseDate(this.state.date),
+                names: this.state.names,
+                description: this.state.description,
+            });
+            this.props.visiblePopup(false);
+            this.props.setActiveCell(null);
+            this.clearValue();
+            this.props.getIdEvent(null);
+        }
+    };
+
+    onReplacement = () => {
+        this.checkEmptiness('event', 'eventEmpty');
+        this.checkEmptiness('date', 'dateEmpty');
+        this.errorDate();
+
+        if (
+            !this.state.eventEmpty &&
+            !this.state.dateEmpty &&
+            !this.state.dateError &&
+            this.state.event.trim() &&
+            this.state.date.trim()
+        ) {
+            
+            this.props.editEvent({
+                id: this.state.eventExistsId,
                 title: this.state.event,
                 date: this.parseDate(this.state.date),
                 names: this.state.names,
@@ -200,8 +273,9 @@ class Popup extends React.Component {
                         onBlur={() => {
                             this.checkEmptiness('date', 'dateEmpty');
                             this.errorDate();
+                            this.checkedEventExists();
                         }}
-                        isError={this.state.dateEmpty || this.state.dateError}
+                        isError={this.state.dateEmpty || this.state.dateError || this.state.eventExists}
                         mt={true}
                     />
 
@@ -223,7 +297,8 @@ class Popup extends React.Component {
 
                     {this.state.eventEmpty && <p className={styles.error}>Поле события должно быть заполнено</p>}
                     {this.state.dateEmpty && <p className={styles.error}>Поле даты должно быть заполнено</p>}
-                    {this.state.dateError && <p className={styles.error}>Дата введена не корректно</p> }
+                    {this.state.dateError && <p className={styles.error}>Дата введена не корректно</p>}
+                    {this.state.eventExists && <p className={styles.error}>Событие существует на введенную дату</p>}
                 </div>
 
 
@@ -239,6 +314,14 @@ class Popup extends React.Component {
                                 text={'Отменить'}
                                 onClick={this.onClose}
                             />
+
+                            {
+                                this.state.eventExists &&
+                                    <ButtonIcon
+                                        text={'Заменить'}
+                                        onClick={this.onReplacement}
+                                    />
+                            }
                         </div>
                 }
 
@@ -254,6 +337,13 @@ class Popup extends React.Component {
                                 text={'Удалить'}
                                 onClick={this.removeEvent}
                             />
+                            {
+                                this.state.eventExists &&
+                                    <ButtonIcon
+                                        text={'Заменить'}
+                                        onClick={this.onReplacement}
+                                    />
+                            }
                         </div>
                 }
             </div>
@@ -262,7 +352,6 @@ class Popup extends React.Component {
 };
 
 const state = (state) => {
-    console.log(state)
     return {
         events: state.events.events,
         position: state.popup.position,
