@@ -1,49 +1,49 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
 import { Button } from '../../common/Button';
 import { Search } from '../Search';
 import ShortPopup from '../ShortPopup';
 import styles from './Header.module.sass';
 
-class Header extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            activePopup: false
-        };
-    };
+const Header = () => {
+  const [activePopup, setActivePopup] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
-    createEvent = () => {
-        this.setState({activePopup: !this.state.activePopup});
-    };
+  const createEvent = () => {
+    setActivePopup(!activePopup);
+  };
 
-    render() {
-        return(
-            <header>
-                <div className={styles.container}>
-                    <div className={styles.wrapperButtons}>
-                        <Button
-                            text={'Добавить'}
-                            active={this.state.activePopup}
-                            onClick={this.createEvent}
-                        />
+  const onChangeSearch = value => {
+    setSearchValue(value);
+  };
 
-                        <Button
-                            text={'Обновить'}
-                            onClick={() => window.location.reload()}
-                        />
-                    </div>
+  return (
+    <header>
+      <div className={styles.container}>
+        <div className={styles.wrapperButtons}>
+          <Button
+            text={'Добавить'}
+            active={activePopup}
+            onClick={createEvent}
+          />
 
-                    <ShortPopup
-                        active={this.state.activePopup}
-                        onVisible={() => this.setState({activePopup: false})}
-                    />
+          <Button
+            text={'Обновить'}
+            onClick={() => window.location.reload()}
+          />
+        </div>
 
-                    <Search />
-                </div>
-            </header>
-        );
-    };
+        <ShortPopup
+          active={activePopup}
+          onVisible={() => setActivePopup(false)}
+        />
+
+        <Search
+          value={searchValue}
+          onChangeSearch={onChangeSearch}
+        />
+      </div>
+    </header>
+  );
 };
 
-export default connect(null)(Header);
+export default Header;
