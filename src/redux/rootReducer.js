@@ -4,7 +4,7 @@ import { popup } from "./reducers/popup";
 import { calendar } from './reducers/calendar';
 
 export const rootReducer = combineReducers({
-    events,
-    popup,
-    calendar
+  events,
+  popup,
+  calendar
 });
