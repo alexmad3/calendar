@@ -333,16 +333,14 @@ const Popup = props => {
   );
 };
 
-const state = (state) => {
-  return {
-    events: state.events.events,
-    position: state.popup.position,
-    months: state.calendar.months,
-    otherMonths: state.calendar.otherMonths,
-    currentDate: state.calendar.currentDate,
-    idEvent: state.calendar.idEvent
-  };
-};
+const state = (state) => ({
+  events: state.events.events,
+  position: state.popup.position,
+  months: state.calendar.months,
+  otherMonths: state.calendar.otherMonths,
+  currentDate: state.calendar.currentDate,
+  idEvent: state.calendar.idEvent
+});
 
 const dispatch = {
   visiblePopup,

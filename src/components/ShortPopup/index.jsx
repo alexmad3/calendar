@@ -200,14 +200,12 @@ const ShortPopup = props => {
   );
 };
 
-const state = state => {
-  return {
-    events: state.events.events,
-    currentDate: state.calendar.currentDate,
-    months: state.calendar.months,
-    otherMonths: state.calendar.otherMonths
-  }
-};
+const state = state => ({
+  events: state.events.events,
+  currentDate: state.calendar.currentDate,
+  months: state.calendar.months,
+  otherMonths: state.calendar.otherMonths
+});
 
 const dispatch = {
   createEvent,

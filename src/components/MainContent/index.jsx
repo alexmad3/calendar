@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { ButtonIcon } from '../../common/ButtonIcon';
 import Calendar from '../Calendar';
@@ -7,72 +7,62 @@ import { visiblePopup } from '../../redux/actions/popup';
 import { setCurrentDate } from '../../redux/actions/calendar';
 import styles from './MainContent.module.sass';
 
-class MainContent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentDate: new Date(),
-      displayDate: ''
-    };
-  };
+const MainContent = props => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [displayDate, setDisplayDate] = useState('');
+  
+    const setterDisplayDate = useCallback(() => {
+      props.setCurrentDate(currentDate);
+      let date = new Date(currentDate);
+      setDisplayDate(`${props.months[date.getMonth()]} ${date.getFullYear()}`);
+    }, [currentDate, props]);
 
-  componentDidMount() {
-    this.setDisplayDate();
-  };
+  useEffect(() => setterDisplayDate(), [setterDisplayDate]);
 
-  setDisplayDate = () => {
-    this.props.setCurrentDate(this.state.currentDate);
-    let date = new Date(this.state.currentDate);
-    this.setState({
-      displayDate: `${this.props.months[date.getMonth()]} ${date.getFullYear()}`
-    });
-  };
-
-  changeMonth = sign => {
-    let date = new Date(this.state.currentDate);
+  const changeMonth = sign => {
+    let date = new Date(currentDate);
     if (sign === '+') {
-      this.setState({ currentDate: date.setMonth(date.getMonth() + 1) }, () => this.setDisplayDate());
+      setCurrentDate(() => date.setMonth(date.getMonth() + 1));
+      setterDisplayDate();
     } else {
-      this.setState({ currentDate: date.setMonth(date.getMonth() - 1) }, () => this.setDisplayDate());
+      setCurrentDate(() => date.setMonth(date.getMonth() - 1));
+      setterDisplayDate()
     }
   };
 
-  currentMonth = () => {
-    this.setState({ currentDate: new Date() }, () => this.setDisplayDate());
+  const currentMonth = () => {
+    currentDate(new Date());
+    setterDisplayDate();
   };
 
-  onClickCell = isVisible => {
-    this.props.visiblePopup(isVisible);
+  const onClickCell = isVisible => {
+    props.visiblePopup(isVisible);
   };
 
-  render() {
-    return (
-      <div className={styles.container}>
-        <div className={styles.wrapperNavigation}>
-          <ButtonIcon icon='fa fa-caret-left' onClick={() => this.changeMonth('-')} />
-          <span className={styles.date}>{this.state.displayDate}</span>
-          <ButtonIcon icon='fa fa-caret-right' onClick={() => this.changeMonth('+')} />
-          <ButtonIcon text='Сегодня' onClick={this.currentMonth} />
-        </div>
-        <Calendar
-          date={this.state.currentDate}
-          onClickCell={this.onClickCell}
-        />
-        <Popup
-          isVisible={this.props.isVisiblePopup}
-          close={this.onClickCell}
-        />
+  return (
+    <div className={styles.container}>
+      <div className={styles.wrapperNavigation}>
+        <ButtonIcon icon='fa fa-caret-left' onClick={() => changeMonth('-')} />
+        <span className={styles.date}>{displayDate}</span>
+        <ButtonIcon icon='fa fa-caret-right' onClick={() => changeMonth('+')} />
+        <ButtonIcon text='Сегодня' onClick={currentMonth} />
       </div>
-    );
-  };
+      <Calendar
+        date={currentDate}
+        onClickCell={onClickCell}
+      />
+      <Popup
+        isVisible={props.isVisiblePopup}
+        close={onClickCell}
+      />
+    </div>
+  );
 }
 
-const state = state => {
-  return {
-    isVisiblePopup: state.popup.isVisible,
-    months: state.calendar.months
-  };
-};
+const state = state => ({
+  isVisiblePopup: state.popup.isVisible,
+  months: state.calendar.months
+});
 
 const dispatch = {
   visiblePopup,
