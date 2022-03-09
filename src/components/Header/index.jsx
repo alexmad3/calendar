@@ -19,7 +19,7 @@ const Header = () => {
   return (
     <header>
       <div className={styles.container}>
-        <div className={styles.wrapperButtons}>
+        <div>
           <Button
             text={'Добавить'}
             active={activePopup}
