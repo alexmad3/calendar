@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { ButtonIcon } from '../../common/ButtonIcon';
 import Calendar from '../Calendar';
@@ -11,6 +11,7 @@ const MainContent = ({months, setCurrentDate,  visiblePopup, isVisiblePopup}) =>
   const [currentDateForDisplay, setCurrentDateForDisplay] = useState(new Date());
   const [displayDate, setDisplayDate] = useState('');
   
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const setterDisplayDate = () => {
     setCurrentDate(currentDateForDisplay);
     let date = new Date(currentDateForDisplay);
