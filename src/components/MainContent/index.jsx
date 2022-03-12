@@ -7,36 +7,36 @@ import { visiblePopup } from '../../redux/actions/popup';
 import { setCurrentDate } from '../../redux/actions/calendar';
 import styles from './MainContent.module.sass';
 
-const MainContent = props => {
-  const [currentDate, setCurrentDate] = useState(new Date());
+const MainContent = ({months, setCurrentDate,  visiblePopup, isVisiblePopup}) => {
+  const [currentDateForDisplay, setCurrentDateForDisplay] = useState(new Date());
   const [displayDate, setDisplayDate] = useState('');
   
-    const setterDisplayDate = useCallback(() => {
-      props.setCurrentDate(currentDate);
-      let date = new Date(currentDate);
-      setDisplayDate(`${props.months[date.getMonth()]} ${date.getFullYear()}`);
-    }, [currentDate, props]);
+  const setterDisplayDate = () => {
+    setCurrentDate(currentDateForDisplay);
+    let date = new Date(currentDateForDisplay);
+    setDisplayDate(`${months[date.getMonth()]} ${date.getFullYear()}`);
+  };
 
   useEffect(() => setterDisplayDate(), [setterDisplayDate]);
 
   const changeMonth = sign => {
-    let date = new Date(currentDate);
+    let date = new Date(currentDateForDisplay);
     if (sign === '+') {
-      setCurrentDate(() => date.setMonth(date.getMonth() + 1));
+      setCurrentDateForDisplay(() => date.setMonth(date.getMonth() + 1));
       setterDisplayDate();
     } else {
-      setCurrentDate(() => date.setMonth(date.getMonth() - 1));
+      setCurrentDateForDisplay(() => date.setMonth(date.getMonth() - 1));
       setterDisplayDate()
     }
   };
 
   const currentMonth = () => {
-    currentDate(new Date());
+    setCurrentDateForDisplay(new Date());
     setterDisplayDate();
   };
 
   const onClickCell = isVisible => {
-    props.visiblePopup(isVisible);
+    visiblePopup(isVisible);
   };
 
   return (
@@ -48,11 +48,11 @@ const MainContent = props => {
         <ButtonIcon text='Сегодня' onClick={currentMonth} />
       </div>
       <Calendar
-        date={currentDate}
+        date={currentDateForDisplay}
         onClickCell={onClickCell}
       />
       <Popup
-        isVisible={props.isVisiblePopup}
+        isVisible={isVisiblePopup}
         close={onClickCell}
       />
     </div>

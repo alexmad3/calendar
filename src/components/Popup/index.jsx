@@ -333,7 +333,7 @@ const Popup = props => {
   );
 };
 
-const state = (state) => ({
+const state = state => ({
   events: state.events.events,
   position: state.popup.position,
   months: state.calendar.months,
