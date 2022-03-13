@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { CalendarCell } from '../../common/CalendarCell';
 import { setActiveCell, setPositionPopup, visiblePopup } from '../../redux/actions/popup';
@@ -6,43 +6,25 @@ import { getIdEvent } from '../../redux/actions/calendar';
 import { setEvents } from '../../redux/actions/events';
 import styles from './Calendar.module.sass';
 
-class Calendar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      displayCell: [],
-    };
+const days = [
+  'Воскресенье, ',
+  'Понедельник, ',
+  'Вторник, ',
+  'Среда, ',
+  'Четверг, ',
+  'Пятница, ',
+  'Суббота, '
+];
 
-    this.days = [
-      'Воскресенье, ',
-      'Понедельник, ',
-      'Вторник, ',
-      'Среда, ',
-      'Четверг, ',
-      'Пятница, ',
-      'Суббота, '
-    ];
-  };
+const Calendar = props => {
+  const [displayCell, setDisplayCell] = useState([]);
 
-  componentDidMount() {
-    this.calendarCalculation();
-    this.props.setEvents();
-  };
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.date !== this.props.date || prevProps.events !== this.props.events) {
-      this.calendarCalculation();
-      this.props.visiblePopup(false);
-      this.props.setActiveCell(null);
-    }
-  }
-
-  calendarCalculation = () => {
-    let firstDay = new Date(new Date(this.props.date).setDate(1)).getDay(),
-      year = new Date(this.props.date).getFullYear(),
-      month = new Date(this.props.date).getMonth(),
-      monthData = [],
-      lastDate;
+  const calendarCalculation = () => {
+    let firstDay = new Date(new Date(props.date).setDate(1)).getDay(),
+        year = new Date(props.date).getFullYear(),
+        month = new Date(props.date).getMonth(),
+        monthData = [],
+        lastDate;
 
     if (firstDay === 0) {
       firstDay = 7;
@@ -50,13 +32,13 @@ class Calendar extends React.Component {
 
     prevDays:
     for (let i = firstDay; i > 1; i--) {
-      for (let j = 0; j < this.props.events.length; j++) {
-        if (new Date(year, month, (i * (-1)) + 2).setHours(0, 0, 0, 0) === new Date(this.props.events[j].date).setHours(0, 0, 0, 0)) {
+      for (let j = 0; j < props.events.length; j++) {
+        if (new Date(year, month, (i * (-1)) + 2).setHours(0, 0, 0, 0) === new Date(props.events[j].date).setHours(0, 0, 0, 0)) {
           monthData.push({
             date: new Date(new Date(year, month, (i * (-1)) + 2)),
-            title: this.props.events[j].title,
-            names: this.props.events[j].names,
-            idEvent: this.props.events[j].id
+            title: props.events[j].title,
+            names: props.events[j].names,
+            idEvent: props.events[j].id
           });
           continue prevDays;
         }
@@ -71,13 +53,13 @@ class Calendar extends React.Component {
         break;
       } else {
         lastDate = i;
-        for (let j = 0; j < this.props.events.length; j++) {
-          if (new Date(year, month, i).setHours(0, 0, 0, 0) === new Date(this.props.events[j].date).setHours(0, 0, 0, 0)) {
+        for (let j = 0; j < props.events.length; j++) {
+          if (new Date(year, month, i).setHours(0, 0, 0, 0) === new Date(props.events[j].date).setHours(0, 0, 0, 0)) {
             monthData.push({
               date: new Date(new Date(year, month, i)),
-              title: this.props.events[j].title,
-              names: this.props.events[j].names,
-              idEvent: this.props.events[j].id
+              title: props.events[j].title,
+              names: props.events[j].names,
+              idEvent: props.events[j].id
             });
             continue presDays;
           }
@@ -89,13 +71,13 @@ class Calendar extends React.Component {
     if (new Date(year, month, lastDate).getDay() !== 0) {
       futDays:
       for (let i = 1; i <= 7 - new Date(year, month, lastDate).getDay(); i++) {
-        for (let j = 0; j < this.props.events.length; j++) {
-          if (new Date(year, month + 1, i).setHours(0, 0, 0, 0) === new Date(this.props.events[j].date).setHours(0, 0, 0, 0)) {
+        for (let j = 0; j < props.events.length; j++) {
+          if (new Date(year, month + 1, i).setHours(0, 0, 0, 0) === new Date(props.events[j].date).setHours(0, 0, 0, 0)) {
             monthData.push({
               date: new Date(new Date(year, month + 1, i)),
-              title: this.props.events[j].title,
-              names: this.props.events[j].names,
-              idEvent: this.props.events[j].id
+              title: props.events[j].title,
+              names: props.events[j].names,
+              idEvent: props.events[j].id
             });
             continue futDays;
           }
@@ -104,22 +86,33 @@ class Calendar extends React.Component {
       }
     }
 
-    this.setState({ displayCell: monthData });
+    setDisplayCell(monthData);
   };
 
-  setActiveCell = (e, activeCell, number, idEvent = null) => {
-    if (activeCell !== this.props.activeCell || idEvent) {
-      this.props.onClickCell(true);
-      this.props.setActiveCell(activeCell);
+  useEffect(() => {
+    calendarCalculation();
+    props.setEvents();
+  }, []);
+
+  useEffect(() => {
+    calendarCalculation();
+    props.visiblePopup(false);
+    props.setActiveCell(null);
+  }, [props.date, props.events]);
+
+  const setActiveCell = (e, activeCell, number, idEvent = null) => {
+    if (activeCell !== props.activeCell || idEvent) {
+      props.onClickCell(true);
+      props.setActiveCell(activeCell);
 
       const parent = e.target.parentNode.getBoundingClientRect(),
-        element = e.target.getBoundingClientRect();
+            element = e.target.getBoundingClientRect();
 
       let wrapperTop,
-        wrapperLeft,
-        horizontalDirection,
-        verticalDirection,
-        lines = document.querySelector(`.${styles.calendar}`).children.length / 7;
+          wrapperLeft,
+          horizontalDirection,
+          verticalDirection,
+          lines = document.querySelector(`.${styles.calendar}`).children.length / 7;
 
       if ((parent.right - (element.left + 464 + e.target.offsetWidth)) > 0) {
         wrapperLeft = element.left + 30 + e.target.offsetWidth;
@@ -145,54 +138,50 @@ class Calendar extends React.Component {
         verticalDirection = 'bottom';
       }
 
-      this.props.setPositionPopup({ wrapperTop, wrapperLeft, horizontalDirection, verticalDirection });
-      this.props.getIdEvent(idEvent);
+      props.setPositionPopup({ wrapperTop, wrapperLeft, horizontalDirection, verticalDirection });
+      props.getIdEvent(idEvent);
     }
   };
 
-  render() {
-    return (
-      <div className={styles.calendar}>
-        {
-          this.state.displayCell.map((el, i) => {
-            if (i < 7) {
-              return <CalendarCell
-                day={`${this.days[new Date(el.date).getDay()]} ${new Date(el.date).getDate()}`}
-                title={el.title}
-                names={el.names}
-                id={+el.date}
-                activeCell={this.props.activeCell}
-                onActive={this.setActiveCell}
-                number={i + 1}
-                idEvent={el.idEvent}
-                key={i}
-              />
-            } else {
-              return <CalendarCell
-                day={new Date(el.date).getDate()}
-                title={el.title}
-                names={el.names}
-                id={+el.date}
-                activeCell={this.props.activeCell}
-                onActive={this.setActiveCell}
-                number={i + 1}
-                idEvent={el.idEvent}
-                key={i}
-              />
-            }
-          })
-        }
-      </div>
-    );
-  };
+  return (
+    <div className={styles.calendar}>
+      {
+        displayCell.map((el, i) => {
+          if (i < 7) {
+            return <CalendarCell
+              day={`${days[new Date(el.date).getDay()]} ${new Date(el.date).getDate()}`}
+              title={el.title}
+              names={el.names}
+              id={+el.date}
+              activeCell={props.activeCell}
+              onActive={setActiveCell}
+              number={i + 1}
+              idEvent={el.idEvent}
+              key={i}
+            />
+          } else {
+            return <CalendarCell
+              day={new Date(el.date).getDate()}
+              title={el.title}
+              names={el.names}
+              id={+el.date}
+              activeCell={props.activeCell}
+              onActive={setActiveCell}
+              number={i + 1}
+              idEvent={el.idEvent}
+              key={i}
+            />
+          }
+        })
+      }
+    </div>
+  );
 };
 
-const state = state => {
-  return {
-    events: state.events.events,
-    activeCell: state.popup.activeCell
-  };
-};
+const state = state => ({
+  events: state.events.events,
+  activeCell: state.popup.activeCell
+});
 
 const dispatch = {
   setActiveCell,
