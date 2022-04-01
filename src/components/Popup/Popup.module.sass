@@ -1,7 +1,7 @@
 .wrapper
   position: absolute
   width: 25rem
-  height: 30rem
+  height: 26rem
   background: white
   border: 1px solid #bebfbf
   border-radius: 3px
@@ -9,6 +9,13 @@
   flex-direction: column
   padding: 1rem
   box-shadow: 2px 2px 6px rgba(0, 0, 0, .35)
+  transition: .4s
+
+  &.oneError
+    height: 28rem
+
+  &.errors
+    height: 30rem
 
 .visible
   display: flex
@@ -51,12 +58,20 @@
 
 .content
   padding: 1rem 1.5rem
+  height: 21.5rem
+  transition: .6s
+
+  &.oneError
+    height: 23rem
+
+  &.errors
+    height: 25rem
 
   & > *:not(:last-child)
     margin-bottom: 1rem
 
-input[name='names']
-  margin-top: 0.2rem
+  & > *:nth-child(3)
+    margin-top: 0.2rem
 
 .description
   width: 20.7rem
@@ -77,13 +92,35 @@ input[name='names']
 .wrapperButtons
   padding: 0 1.5rem
   display: flex
-  height: 100%
-  align-items: flex-end
 
-.error
+.errorPrompt
   color: red
   margin-top: 0
   margin-bottom: .4rem!important
+  animation: hide .4s
+  animation-fill-mode: forwards
+  transform-origin: top
+  display: none
 
   &:last-child
     margin-bottom: 0
+
+.showError
+  animation: show .4s
+  animation-fill-mode: forwards
+  display: block
+
+@keyframes hide
+  0%
+    transform: scaleY(1)
+
+  100%
+    transform: scaleY(0)
+    display: none
+
+@keyframes show
+  0%
+    transform: scaleY(0)
+
+  100%
+    transform: scaleY(1)

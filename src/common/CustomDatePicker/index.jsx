@@ -30,7 +30,6 @@ export const CustomDatePicker = ({date, onChange, isError}) => {
         onChange={date => onChange(date)}
         customInput={<ExampleCustomInput />}
         dateFormat="dd.MM.yyyy"
-        classNames={styles.error}
       />
     </div>
   );

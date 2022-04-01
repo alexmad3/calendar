@@ -5,8 +5,11 @@ import { createEvent, editEvent, removeEvent } from '../../redux/actions/events'
 import { getIdEvent } from '../../redux/actions/calendar';
 import { ButtonIcon } from '../../common/ButtonIcon';
 import { Input } from '../../common/Input';
-import styles from './Popup.module.sass';
 import { CustomDatePicker } from '../../common/CustomDatePicker';
+import classNames from 'classnames/bind';
+import styles from './Popup.module.sass';
+
+const cx = classNames.bind(styles);
 
 const Popup = props => {
   const [event, setEvent] = useState('');
@@ -164,7 +167,12 @@ const Popup = props => {
 
   return (
     <div
-      className={`${styles.wrapper} ${props.isVisible ? styles.visible : ''}`}
+      className={cx({
+        wrapper: true,
+        visible: props.isVisible,
+        oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
+        errors: eventEmpty && eventExists
+      })}
       style={{ left: props.position.wrapperLeft + 'px', top: props.position.wrapperTop + 'px' }}
     >
       <div className={
@@ -178,11 +186,14 @@ const Popup = props => {
         <i className='fa fa-times'></i>
       </button>
 
-      <div className={styles.content}>
+      <div className={cx({
+        content: true,
+        oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
+        errors: eventEmpty && eventExists
+      })}>
         <Input
           placeholder={'Событие'}
           value={event}
-          name={'event'}
           onChange={(_name, value) => setEvent(value)}
           onBlur={() => checkEmptiness(event, setEventEmpty)}
           isError={eventEmpty}
@@ -200,7 +211,6 @@ const Popup = props => {
         <Input
           placeholder={'Имена участников'}
           value={names}
-          name={'names'}
           onChange={(_name, value) => setNames(value)}
         />
 
@@ -208,12 +218,24 @@ const Popup = props => {
           className={styles.description}
           placeholder='Описание'
           value={description}
-          name={'description'}
           onChange={e => setDescription(e.target.value)}
         />
 
-        {eventEmpty && <p className={styles.error}>Поле события должно быть заполнено</p>}
-        {eventExists && <p className={styles.error}>Событие существует на введенную дату</p>}
+        <p className={cx({
+          errorPrompt: true,
+          showError: eventEmpty,
+          eventEmpty
+        })}>
+          Поле события должно быть заполнено
+        </p>
+
+        <p className={cx({
+          errorPrompt: true,
+          showError: eventExists,
+          eventExists
+        })}>
+          Событие существует на введенную дату
+        </p>
       </div>
 
 

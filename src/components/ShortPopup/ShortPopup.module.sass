@@ -1,6 +1,6 @@
 .wrapper
   width: 25rem
-  height: 11rem
+  height: 13rem
   background: white
   border: 1px solid #bebfbf
   border-radius: 3px
@@ -10,6 +10,13 @@
   flex-direction: column
   padding: 1rem
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.35)
+  transition: .4s
+
+  &.oneError
+    height: 15rem
+
+  &.errors
+    height: 17rem
 
 .active
   display: flex
@@ -39,17 +46,53 @@
 
 .content
   padding: 1rem 1.5rem
+  height: 7.5rem
+  transition: .4s
+
+  &.oneError
+    height: 9rem
+
+  &.errors
+    height: 11rem
+
+  & > *:first-child
+    margin-bottom: 1rem
+
+  & > *:nth-child(2)
+    margin-bottom: 0.4rem
 
 .wrapperButton
   display: flex
-  height: 100%
-  align-items: flex-end
   padding: 0 1.5rem
 
-.error
+.errorPrompt
   color: red
   margin-top: 0
   margin-bottom: .4rem
+  animation: hide .4s
+  animation-fill-mode: forwards
+  transform-origin: top
+  display: none
 
   &:last-child
     margin-bottom: 0
+
+.showError
+  animation: show .4s
+  animation-fill-mode: forwards
+  display: block
+
+@keyframes hide
+  0%
+    transform: scaleY(1)
+
+  100%
+    transform: scaleY(0)
+    display: none
+
+@keyframes show
+  0%
+    transform: scaleY(0)
+
+  100%
+    transform: scaleY(1)
