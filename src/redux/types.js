@@ -8,6 +8,7 @@ export const SET_EVENTS = 'SET_EVENTS';
 export const VISIBLE_POPUP = 'IS_VISIBLE_POPUP';
 export const ACTIVE_CELL = 'ACTIVE_CELL';
 export const POSITION_POPUP = 'POSITION_POPUP';
+export const SET_DATE_TO_PICKER = 'SET_DATE_TO_PICKER';
 
 // Calendar
 export const MONTHS = 'MONTHS';

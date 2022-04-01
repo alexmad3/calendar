@@ -1,8 +1,9 @@
-import { ACTIVE_CELL, POSITION_POPUP, VISIBLE_POPUP } from "../types";
+import { ACTIVE_CELL, POSITION_POPUP, VISIBLE_POPUP, SET_DATE_TO_PICKER } from "../types";
 
 const initialState = {
   isVisible: false,
   activeCell: null,
+  dateToPicker: null,
   position: {
     wrapperTop: 0,
     wrapperLeft: 0,
@@ -21,6 +22,9 @@ export const popup = (state = initialState, action) => {
 
     case POSITION_POPUP:
       return { ...state, position: { ...action.payload } };
+
+    case SET_DATE_TO_PICKER:
+      return { ...state, dateToPicker: action.payload};
 
     default: return state;
   };

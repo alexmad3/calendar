@@ -1,0 +1,43 @@
+.wrapperDatePicker
+  display: flex
+  justify-content: center
+  width: 100%
+
+  & > *:first-child
+    width: 10rem
+
+.fieldset
+  height: 2rem
+  border-radius: 3px
+  border: 1px solid #afafaf
+  cursor: text
+
+  &:focus
+    border-color: #109bf8
+
+    .legend
+      color: #109bf8
+
+.legend
+  font-size: .9rem
+  padding: 0 6px
+  color: #696969
+
+.input
+  width: calc(100% - 3rem)
+  border: none
+  font-size: .95rem
+  position: absolute
+  top: 21px
+
+  &:hover, &:focus
+    border: none
+    outline: none
+
+.iconCalendar
+  position: absolute
+  top: 21px
+  right: 16px
+
+.error
+  border-color: red

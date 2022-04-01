@@ -7,7 +7,7 @@ export const CalendarCell = props =>
       ${props.title ? styles.event : ''} 
       ${props.activeCell === props.id ? styles.activeCell : ''} `
     }
-    onClick={(e) => props.onActive(e, props.id, props.number, props.idEvent)}
+    onClick={(e) => props.onActive(e, props.id, props.number, props.idEvent, props.date)}
   >
     <p className={styles.day}>
       {props.day}

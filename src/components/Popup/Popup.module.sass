@@ -1,82 +1,89 @@
 .wrapper
-    position: absolute
-    width: 25rem
-    height: 30rem
-    background: white
-    border: 1px solid #bebfbf
-    border-radius: 3px
-    display: none
-    flex-direction: column
-    padding: 1rem
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.35)
+  position: absolute
+  width: 25rem
+  height: 30rem
+  background: white
+  border: 1px solid #bebfbf
+  border-radius: 3px
+  display: none
+  flex-direction: column
+  padding: 1rem
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, .35)
 
 .visible
-    display: flex
+  display: flex
 
 .arrow
-    border: solid #bebfbf
-    border-width: 0 1px 1px 0
-    padding: 7px
-    position: absolute
-    background: white
-    width: 0px
+  border: solid #bebfbf
+  border-width: 0 1px 1px 0
+  padding: 7px
+  position: absolute
+  background: white
+  width: 0
 
 .top
-    top: 60px
+  top: 60px
 
 .bottom
-    bottom: 60px
+  bottom: 60px
 
 .left
-    left: -8px
-    transform: rotate(135deg)
+  left: -8px
+  transform: rotate(135deg)
 
 .right
-    right: -8px
-    transform: rotate(-45deg)
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2)
+  right: -8px
+  transform: rotate(-45deg)
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, .2)
 
 .cancel
-    background: transparent
-    border: none
-    cursor: pointer
-    outline: none
-    font-size: 1.3rem
-    color: #bebfbf
-    align-self: flex-end
-    padding: 1px 3px
+  background: transparent
+  border: none
+  cursor: pointer
+  outline: none
+  font-size: 1.3rem
+  color: #bebfbf
+  align-self: flex-end
+  padding: 1px 3px
 
-    &:hover
-        color: #636363
+  &:hover
+    color: #636363
 
 .content
-    padding: 1rem 1.5rem
+  padding: 1rem 1.5rem
 
-.textarea
-    width: 20.7rem
-    height: 8rem
-    resize: none
-    border: 1px solid #afafaf
-    border-radius: 3px
-    font-size: 1.4rem
-    padding: 3px 10px
-    outline: none
-    transition: all .15s
-    margin-top: 2rem
+  & > *:not(:last-child)
+    margin-bottom: 1rem
 
-    &:focus
-        box-shadow: 0 0 10px #7fbbe6
+input[name='names']
+  margin-top: 0.2rem
+
+.description
+  width: 20.7rem
+  height: 8rem
+  margin: .4rem 0!important
+  resize: none
+  border: 1px solid #afafaf
+  border-radius: 3px
+  font-family: Georgia, 'Times New Roman', Times, serif
+  font-size: 1rem
+  padding: 3px 10px
+  outline: none
+  transition: all .15s
+
+  &:focus
+    border-color: #109bf8
 
 .wrapperButtons
-    padding: .5rem 1.5rem
-    display: flex
-    height: 100%
-    align-items: flex-end
+  padding: 0 1.5rem
+  display: flex
+  height: 100%
+  align-items: flex-end
 
 .error
-    color: red
-    margin-top: 0
-    margin-bottom: .4rem
+  color: red
+  margin-top: 0
+  margin-bottom: .4rem!important
 
-    &:last-child
-        margin-bottom: 0
+  &:last-child
+    margin-bottom: 0

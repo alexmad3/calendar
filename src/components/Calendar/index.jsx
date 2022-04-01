@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { CalendarCell } from '../../common/CalendarCell';
-import { setActiveCell, setPositionPopup, visiblePopup } from '../../redux/actions/popup';
+import { setActiveCell, setPositionPopup, visiblePopup, setDateToPicker } from '../../redux/actions/popup';
 import { getIdEvent } from '../../redux/actions/calendar';
 import { setEvents } from '../../redux/actions/events';
 import styles from './Calendar.module.sass';
@@ -100,10 +100,11 @@ const Calendar = props => {
     props.setActiveCell(null);
   }, [props.date, props.events]);
 
-  const setActiveCell = (e, activeCell, number, idEvent = null) => {
+  const setActiveCell = (e, activeCell, number, idEvent = null, date) => {
     if (activeCell !== props.activeCell || idEvent) {
       props.onClickCell(true);
       props.setActiveCell(activeCell);
+      props.setDateToPicker(date);
 
       const parent = e.target.parentNode.getBoundingClientRect(),
             element = e.target.getBoundingClientRect();
@@ -150,6 +151,7 @@ const Calendar = props => {
           if (i < 7) {
             return <CalendarCell
               day={`${days[new Date(el.date).getDay()]} ${new Date(el.date).getDate()}`}
+              date={+el.date}
               title={el.title}
               names={el.names}
               id={+el.date}
@@ -157,11 +159,12 @@ const Calendar = props => {
               onActive={setActiveCell}
               number={i + 1}
               idEvent={el.idEvent}
-              key={i}
+              key={+el.date}
             />
           } else {
             return <CalendarCell
               day={new Date(el.date).getDate()}
+              date={+el.date}
               title={el.title}
               names={el.names}
               id={+el.date}
@@ -169,7 +172,7 @@ const Calendar = props => {
               onActive={setActiveCell}
               number={i + 1}
               idEvent={el.idEvent}
-              key={i}
+              key={+el.date}
             />
           }
         })
@@ -188,7 +191,8 @@ const dispatch = {
   setPositionPopup,
   visiblePopup,
   getIdEvent,
-  setEvents
+  setEvents,
+  setDateToPicker
 };
 
 export default connect(state, dispatch)(Calendar);

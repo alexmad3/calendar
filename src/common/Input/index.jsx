@@ -4,9 +4,7 @@ import styles from './Input.module.sass';
 export const Input = props =>
   <input
     className={
-      `${styles.input} 
-      ${props.mt ? styles.mt : ''} 
-      ${props.isError ? styles.error : ''}`
+      `${styles.input} ${props.isError ? styles.error : ''}`
     }
     placeholder={props.placeholder}
     value={props.value}
