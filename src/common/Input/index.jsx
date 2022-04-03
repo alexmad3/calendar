@@ -1,11 +1,12 @@
 import React from 'react';
+import classNames from 'classnames/bind';
 import styles from './Input.module.sass';
+
+const cx = classNames.bind(styles);
 
 export const Input = props =>
   <input
-    className={
-      `${styles.input} ${props.isError ? styles.error : ''}`
-    }
+    className={props.className + ' ' + cx({input: true, error: props.isError})}
     placeholder={props.placeholder}
     value={props.value}
     name={props.name}

@@ -127,7 +127,7 @@ const ShortPopup = props => {
         errors: eventEmpty && eventExists
       })}>
         <Input
-          placeholder={'Событие'}
+          placeholder='Событие'
           value={event}
           onChange={(_name, value) => setEvent(value)}
           onBlur={() => {
@@ -164,11 +164,18 @@ const ShortPopup = props => {
 
       </div>
       <div className={styles.wrapperButton}>
-        <ButtonIcon onClick={createEvent} text={'Создать'} />
+        <ButtonIcon
+          className='success'
+          icon='fa fa-pencil'
+          text='Создать'
+          onClick={createEvent}
+          />
         {
           eventExists &&
           <ButtonIcon
-            text={'Заменить'}
+            className='primary'
+            icon='fa fa-cog'
+            text='Заменить'
             onClick={onReplacement}
           />
         }
@@ -184,6 +191,6 @@ const state = state => ({
 const dispatch = {
   createEvent,
   editEvent
-}
+};
 
 export default connect(state, dispatch)(ShortPopup);

@@ -1,20 +1,73 @@
 .btn
-    background: white
-    border-radius: 3px
-    border: 2px solid #bebfbf
-    cursor: pointer
-    outline: none
-    font-size: 1rem
+  background: white
+  border-radius: 3px
+  border: 1px solid #bebfbf
+  cursor: pointer
+  outline: none
+  font-size: 1rem
+  padding: 6px 18px
+
+  &:hover
+    background-color: #e8e8e8
+
+  &:active
+    background-color: #dcdcdc
+    border-color: #a2a2a2
+
+  &:focus
+    box-shadow: 0 0 0 1px #a2a2a2
+
+  &:not(:last-child)
+    margin-right: 1rem
+
+  &.danger
+    background-color: #ff1212
+    color: white
+    border-color: #a70606
 
     &:hover
-        background-color: #e8e8e8
+      background-color: #d71313
 
     &:active
-        background-color: #dcdcdc
-        border-color: #a2a2a2
+      background-color: #c00d0d
+      border-color: #b71010
 
     &:focus
-        box-shadow: 0 0 0 1px #a2a2a2
+      box-shadow: 0 0 0 1px #b71010
 
-    &:not(:last-child)
-        margin-right: 1rem
+  &.success
+    background-color: #27ff00
+    color: white
+    border-color: #03d700
+
+    &:hover
+      background-color: #1dcf2c
+
+    &:active
+      background-color: #2bbb37
+      border-color: #19a119
+
+    &:focus
+      box-shadow: 0 0 0 1px #19a119
+
+  &.primary
+    background-color: #109bf8
+    color: white
+    border: 1px solid #109bf8
+
+    &:hover
+      background-color: #0d7bc4
+
+    &:active
+      background-color: #0d5ca2
+      border-color: #0c5596
+
+    &:focus
+      box-shadow: 0 0 0 3px #7fbbe6
+
+.icon
+  width: 14px
+  height: 14px
+
+.mr
+  margin-right: .5rem

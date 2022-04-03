@@ -192,7 +192,8 @@ const Popup = props => {
         errors: eventEmpty && eventExists
       })}>
         <Input
-          placeholder={'Событие'}
+          className={styles.field}
+          placeholder='Событие'
           value={event}
           onChange={(_name, value) => setEvent(value)}
           onBlur={() => checkEmptiness(event, setEventEmpty)}
@@ -209,7 +210,8 @@ const Popup = props => {
         />
 
         <Input
-          placeholder={'Имена участников'}
+          className={styles.field}
+          placeholder='Имена участников'
           value={names}
           onChange={(_name, value) => setNames(value)}
         />
@@ -243,19 +245,24 @@ const Popup = props => {
         !props.idEvent &&
         <div className={styles.wrapperButtons}>
           <ButtonIcon
-            text={'Создать'}
+            className='success'
+            icon='fa fa-pencil'
+            text='Создать'
             onClick={onSaveEvent}
           />
 
           <ButtonIcon
-            text={'Отменить'}
+            icon='fa fa-times'
+            text='Отменить'
             onClick={onClose}
           />
 
           {
             eventExists &&
             <ButtonIcon
-              text={'Заменить'}
+              className='primary'
+              icon='fa fa-cog'
+              text='Заменить'
               onClick={onReplacement}
             />
           }
@@ -266,18 +273,24 @@ const Popup = props => {
         props.idEvent &&
         <div className={styles.wrapperButtons}>
           <ButtonIcon
-            text={'Редактировать'}
+            className='primary'
+            icon='fa fa-cog'
+            text='Редактировать'
             onClick={onEdit}
           />
 
           <ButtonIcon
-            text={'Удалить'}
+            className='danger'
+            icon='fa fa-trash'
+            text='Удалить'
             onClick={removeEvent}
           />
           {
             eventExists &&
             <ButtonIcon
-              text={'Заменить'}
+              className='primary'
+              icon='fa fa-cog'
+              text='Заменить'
               onClick={onReplacement}
             />
           }

@@ -115,11 +115,11 @@ const Calendar = props => {
           verticalDirection,
           lines = document.querySelector(`.${styles.calendar}`).children.length / 7;
 
-      if ((parent.right - (element.left + 464 + e.target.offsetWidth)) > 0) {
+      if ((parent.right - (element.left + 576 + e.target.offsetWidth)) > 0) {
         wrapperLeft = element.left + 30 + e.target.offsetWidth;
         horizontalDirection = 'left';
       } else {
-        wrapperLeft = element.left - 464;
+        wrapperLeft = element.left - 576;
         horizontalDirection = 'right';
       }
 
