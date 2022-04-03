@@ -12,8 +12,11 @@ import styles from './Popup.module.sass';
 const cx = classNames.bind(styles);
 
 const Popup = props => {
+  const parseDate = (date = new Date()) =>
+    +(new Date(`${new Date(date).getFullYear()}-${new Date(date).getMonth() + 1}-${new Date(date).getDate()}`));
+
   const [event, setEvent] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(parseDate());
   const [names, setNames] = useState('');
   const [description, setDescription] = useState('');
   const [eventEmpty, setEventEmpty] = useState(false);
@@ -25,13 +28,13 @@ const Popup = props => {
       let event = props.events.find(event => event.id === props.idEvent);
 
       setEvent(event.title);
-      setDate(new Date(event.date));
+      setDate(parseDate(event.date));
       setNames(event.names);
       setDescription(event.description);
       setEventExistsId('');
     } else {
       setEvent('');
-      setDate(+(props.dateToPicker));
+      setDate(parseDate(props.dateToPicker));
       setNames('');
       setDescription('');
       setEventExistsId('');
@@ -46,7 +49,7 @@ const Popup = props => {
 
   const clearValue = () => {
     setEvent('');
-    setDate(new Date());
+    setDate(parseDate());
     setNames('');
     setDescription('');
     setEventExistsId('');
@@ -204,8 +207,8 @@ const Popup = props => {
           date={date}
           isError={eventExists}
           onChange={date => {
-            setDate(+(new Date(date)));
-            checkedEventExists(date);
+            setDate(parseDate(date));
+            checkedEventExists(parseDate(date));
           }}
         />
 

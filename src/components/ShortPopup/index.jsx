@@ -10,9 +10,12 @@ import styles from './ShortPopup.module.sass';
 const cx = classNames.bind(styles);
 
 const ShortPopup = props => {
+  const parseDate = (date = new Date()) =>
+    +(new Date(`${new Date(date).getFullYear()}-${new Date(date).getMonth() + 1}-${new Date(date).getDate()}`));
+
   const [event, setEvent] = useState('');
   const [eventEmpty, setEventEmpty] = useState(false);
-  const [date, setDate] = useState(+(new Date()));
+  const [date, setDate] = useState(parseDate());
   const [eventExists, setEventExists] = useState(false);
   const [eventExistsId, setEventExistsId] = useState('');
 
@@ -45,9 +48,6 @@ const ShortPopup = props => {
       clearValue();
     }
   };
-
-  const parseDate = (date = new Date()) =>
-    +(new Date(`${new Date(date).getFullYear()}-${new Date(date).getMonth() + 1}-${new Date(date).getDate()}`));
 
   const checkEmptiness = () =>
     event.trim() ? setEventEmpty(false) : setEventEmpty(true);
@@ -89,7 +89,7 @@ const ShortPopup = props => {
 
   const clearValue = () => {
     setEvent('');
-    setDate(+(new Date()));
+    setDate(parseDate());
     setEventEmpty(false);
     setEventExists(false);
     setEventExistsId('');
@@ -141,8 +141,8 @@ const ShortPopup = props => {
           date={date}
           isError={eventExists}
           onChange={date => {
-            setDate(+(new Date(date)));
-            checkedEventExists(date);
+            setDate(parseDate(date));
+            checkedEventExists(parseDate(date));
           }}
         />
 
