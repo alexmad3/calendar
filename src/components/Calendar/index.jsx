@@ -4,25 +4,16 @@ import { CalendarCell } from '../../common/CalendarCell';
 import { setActiveCell, setPositionPopup, visiblePopup, setDateToPicker } from '../../redux/actions/popup';
 import { getIdEvent } from '../../redux/actions/calendar';
 import { setEvents } from '../../redux/actions/events';
+import { days } from '../../constants';
 import styles from './Calendar.module.sass';
-
-const days = [
-  'Воскресенье, ',
-  'Понедельник, ',
-  'Вторник, ',
-  'Среда, ',
-  'Четверг, ',
-  'Пятница, ',
-  'Суббота, '
-];
 
 const Calendar = props => {
   const [displayCell, setDisplayCell] = useState([]);
 
   const calendarCalculation = () => {
-    let firstDay = new Date(new Date(props.date).setDate(1)).getDay(),
-        year = new Date(props.date).getFullYear(),
-        month = new Date(props.date).getMonth(),
+    let firstDay = new Date(new Date(props.selectedDate).setDate(1)).getDay(),
+        year = new Date(props.selectedDate).getFullYear(),
+        month = new Date(props.selectedDate).getMonth(),
         monthData = [],
         lastDate;
 
@@ -98,7 +89,7 @@ const Calendar = props => {
     calendarCalculation();
     props.visiblePopup(false);
     props.setActiveCell(null);
-  }, [props.date, props.events]);
+  }, [props.selectedDate, props.events]);
 
   const setActiveCell = (e, activeCell, number, idEvent = null, date) => {
     if (activeCell !== props.activeCell || idEvent) {
@@ -183,7 +174,8 @@ const Calendar = props => {
 
 const state = state => ({
   events: state.events.events,
-  activeCell: state.popup.activeCell
+  activeCell: state.popup.activeCell,
+  selectedDate: state.calendar.selectedDate
 });
 
 const dispatch = {

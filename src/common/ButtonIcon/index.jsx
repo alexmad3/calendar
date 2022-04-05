@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind';
-import { memo } from 'react';
 import styles from './ButtonIcon.module.sass';
 
 const cx = classNames.bind(styles);

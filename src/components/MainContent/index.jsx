@@ -1,55 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { ButtonIcon } from '../../common/ButtonIcon';
 import Calendar from '../Calendar';
 import Popup from '../Popup';
 import { visiblePopup } from '../../redux/actions/popup';
-import { setCurrentDate } from '../../redux/actions/calendar';
 import styles from './MainContent.module.sass';
 
-const MainContent = ({months, setCurrentDate,  visiblePopup, isVisiblePopup}) => {
-  const [currentDateForDisplay, setCurrentDateForDisplay] = useState(new Date());
-  const [displayDate, setDisplayDate] = useState('');
-  
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const setterDisplayDate = () => {
-    setCurrentDate(currentDateForDisplay);
-    let date = new Date(currentDateForDisplay);
-    setDisplayDate(`${months[date.getMonth()]} ${date.getFullYear()}`);
-  };
-
-  useEffect(() => setterDisplayDate(), [setterDisplayDate]);
-
-  const changeMonth = sign => {
-    let date = new Date(currentDateForDisplay);
-    if (sign === '+') {
-      setCurrentDateForDisplay(() => date.setMonth(date.getMonth() + 1));
-      setterDisplayDate();
-    } else {
-      setCurrentDateForDisplay(() => date.setMonth(date.getMonth() - 1));
-      setterDisplayDate()
-    }
-  };
-
-  const currentMonth = () => {
-    setCurrentDateForDisplay(new Date());
-    setterDisplayDate();
-  };
-
+const MainContent = ({ visiblePopup, isVisiblePopup}) => {
   const onClickCell = isVisible => {
     visiblePopup(isVisible);
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.wrapperNavigation}>
-        <ButtonIcon icon='fa fa-caret-left' onClick={() => changeMonth('-')} />
-        <span className={styles.date}>{displayDate}</span>
-        <ButtonIcon icon='fa fa-caret-right' onClick={() => changeMonth('+')} />
-        <ButtonIcon text='Сегодня' onClick={currentMonth} />
-      </div>
       <Calendar
-        date={currentDateForDisplay}
         onClickCell={onClickCell}
       />
       <Popup
@@ -61,13 +24,11 @@ const MainContent = ({months, setCurrentDate,  visiblePopup, isVisiblePopup}) =>
 }
 
 const state = state => ({
-  isVisiblePopup: state.popup.isVisible,
-  months: state.calendar.months
+  isVisiblePopup: state.popup.isVisible
 });
 
 const dispatch = {
-  visiblePopup,
-  setCurrentDate
+  visiblePopup
 };
 
 export default connect(state, dispatch)(MainContent);

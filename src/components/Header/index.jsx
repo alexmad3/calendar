@@ -1,19 +1,44 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { Button } from '../../common/Button';
+import { ButtonIcon } from '../../common/ButtonIcon';
 import { Search } from '../Search';
 import ShortPopup from '../ShortPopup';
+import { setSelectedDate } from '../../redux/actions/calendar';
+import { months } from '../../constants';
 import styles from './Header.module.sass';
 
-const Header = () => {
+const Header = ({setSelectedDate, selectedDate}) => {
   const [activePopup, setActivePopup] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [displayDate, setDisplayDate] = useState('');
 
-  const createEvent = () => {
+  const onVisibleShortPopup = () => {
     setActivePopup(!activePopup);
   };
 
   const onChangeSearch = value => {
     setSearchValue(value);
+  };
+
+  const setterDisplayDate = useCallback((date = new Date()) => {
+    setSelectedDate(date);
+    setDisplayDate(`${months[date.getMonth()]} ${date.getFullYear()}`);
+  }, [setSelectedDate]);
+
+  useEffect(() => setterDisplayDate(), [setterDisplayDate]);
+
+  const changeMonth = sign => {
+    if (!sign) {
+      setterDisplayDate();
+      return;
+    }
+
+    if (sign === '+') {
+      setterDisplayDate(new Date(selectedDate.setMonth(selectedDate.getMonth() + 1)));
+    } else {
+      setterDisplayDate(new Date(selectedDate.setMonth(selectedDate.getMonth() - 1)));
+    }
   };
 
   return (
@@ -23,13 +48,20 @@ const Header = () => {
           <Button
             text={'Добавить'}
             active={activePopup}
-            onClick={createEvent}
+            onClick={onVisibleShortPopup}
           />
 
           <Button
             text={'Обновить'}
             onClick={() => window.location.reload()}
           />
+        </div>
+
+        <div className={styles.controlButtons}>
+          <ButtonIcon icon='fa fa-caret-left' onClick={() => changeMonth('-')} />
+          <span className={styles.date}>{displayDate}</span>
+          <ButtonIcon icon='fa fa-caret-right' onClick={() => changeMonth('+')} />
+          <ButtonIcon text='Текущий месяц' onClick={() => changeMonth()} />
         </div>
 
         <ShortPopup
@@ -46,4 +78,12 @@ const Header = () => {
   );
 };
 
-export default Header;
+const state = state => ({
+  selectedDate: state.calendar.selectedDate
+});
+
+const dispatch = {
+  setSelectedDate
+};
+
+export default connect(state, dispatch)(Header);

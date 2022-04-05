@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { createEvent, editEvent } from '../../redux/actions/events';
 import { ButtonIcon } from '../../common/ButtonIcon';
@@ -87,18 +87,18 @@ const ShortPopup = props => {
     }
   };
 
-  const clearValue = () => {
+  const clearValue = useCallback(() => {
     setEvent('');
     setDate(parseDate());
     setEventEmpty(false);
     setEventExists(false);
     setEventExistsId('');
-  };
+  }, []);
 
   useEffect(() => {
     if (!props.active)
       clearValue();
-  }, [props.active]);
+  }, [props.active, clearValue]);
 
   const onClose = () => {
     props.onVisible();
