@@ -83,7 +83,7 @@ const Calendar = props => {
   useEffect(() => {
     calendarCalculation();
     props.setEvents();
-  }, []);
+  }, []); // max update events
 
   useEffect(() => {
     calendarCalculation();
@@ -116,16 +116,16 @@ const Calendar = props => {
 
       if (number / 7 <= lines - 2) {
         if (number % 7 === 0) {
-          wrapperTop = Math.floor(number / 7) * 250 + 208 - 250;
+          wrapperTop = Math.floor(number / 7) * 250 + 112 - 250;
         } else {
-          wrapperTop = Math.floor(number / 7) * 250 + 208;
+          wrapperTop = Math.floor(number / 7) * 250 + 112;
         }
         verticalDirection = 'top';
       } else {
         if (number % 7 === 0) {
-          wrapperTop = (Math.floor(number / 7) * 250 + 208) - (514 - 250) - 250;
+          wrapperTop = (Math.floor(number / 7) * 250 + 112) - (482 - 250) - 250;
         } else {
-          wrapperTop = (Math.floor(number / 7) * 250 + 208) - (514 - 250);
+          wrapperTop = (Math.floor(number / 7) * 250 + 112) - (482 - 250);
         }
         verticalDirection = 'bottom';
       }
