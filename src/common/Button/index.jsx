@@ -1,9 +1,14 @@
+import classNames from 'classnames/bind';
 import styles from './Button.module.sass';
 
+const cx = classNames.bind(styles);
+
 export const Button = props =>
-  <button
-    className={`${styles.button} ${props.active ? styles.active : ''}`}
-    onClick={() => props.onClick()}
+  <button className={cx({
+            button: true,
+            active: props.active
+          })}
+          onClick={() => props.onClick()}
   >
     {props.text}
   </button>;

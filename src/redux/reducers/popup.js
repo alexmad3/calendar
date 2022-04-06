@@ -26,6 +26,7 @@ export const popup = (state = initialState, action) => {
     case SET_DATE_TO_PICKER:
       return { ...state, dateToPicker: action.payload};
 
-    default: return state;
+    default:
+      return state;
   };
 };

@@ -30,7 +30,7 @@ export const events = (state = initialState, action) => {
       return { ...state, events: {...state.events, [action.payload.date]: action.payload} };
 
     case REMOVE_EVENT:
-      let newState = {...state.events};
+      const newState = {...state.events};
       delete newState[action.payload];
       localStorage.setItem('events', JSON.stringify(newState));
       return { ...state, events: newState };
@@ -38,6 +38,7 @@ export const events = (state = initialState, action) => {
     case GET_EVENTS:
       return { ...state, events: (JSON.parse(localStorage.getItem('events')) || {}) };
 
-    default: return state;
+    default:
+      return state;
   };
 };

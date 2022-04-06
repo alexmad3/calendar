@@ -12,12 +12,10 @@ const MainContent = ({ visiblePopup, isVisiblePopup}) => {
 
   return (
     <div className={styles.container}>
-      <Calendar
-        onClickCell={onClickCell}
-      />
-      <Popup
-        isVisible={isVisiblePopup}
-        close={onClickCell}
+      <Calendar onClickCell={onClickCell} />
+
+      <Popup  isVisible={isVisiblePopup}
+              close={onClickCell}
       />
     </div>
   );

@@ -111,24 +111,22 @@ const Calendar = props => {
         displayCell.map((el, i) => {
           if (i < 7) {
             return (
-              <CalendarCell
-                date={+el.date}
-                event={el.event}
-                activeCell={props.activeCell}
-                onActive={setActiveCell}
-                number={i + 1}
-                key={+el.date}
+              <CalendarCell date={+el.date}
+                            event={el.event}
+                            activeCell={props.activeCell}
+                            onActive={setActiveCell}
+                            number={i + 1}
+                            key={+el.date}
               />
             );
           } else {
             return (
-              <CalendarCell
-                date={+el.date}
-                event={el.event}
-                activeCell={props.activeCell}
-                onActive={setActiveCell}
-                number={i + 1}
-                key={+el.date}
+              <CalendarCell date={+el.date}
+                            event={el.event}
+                            activeCell={props.activeCell}
+                            onActive={setActiveCell}
+                            number={i + 1}
+                            key={+el.date}
               />
             );
           }

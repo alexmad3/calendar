@@ -9,6 +9,7 @@ export const calendar = (state = initialState, action) => {
     case SELECTED_DATE:
       return { ...state, selectedDate: action.payload };
 
-    default: return state;
+    default:
+      return state;
   };
 };

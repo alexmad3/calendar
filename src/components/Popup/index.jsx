@@ -29,10 +29,10 @@ const Popup = props => {
   }, [props.events, props.dateToPicker]);
 
   useEffect(() => {
-    updateStateInputs();
-    setEventEmpty(false);
-    setEventExists(false);
-  }, [updateStateInputs]);
+    if (props.activeCell) {
+      updateStateInputs();
+    }
+  }, [updateStateInputs, props.activeCell]);
 
   const clearValue = () => {
     setEvent('');
@@ -41,15 +41,15 @@ const Popup = props => {
     setDescription('');
     setEventEmpty(false);
     setEventExists(false);
+    props.visiblePopup(false);
+    props.setActiveCell(null);
   };
 
   const checkEmptiness = (name, setError) =>
     name.trim() ? setError(false) : setError(true);
 
   const checkedEventExists = (newDate = date) => {
-    const newParseDate =
-      +(new Date(`${new Date(newDate).getFullYear()}-${new Date(newDate).getMonth() + 1}-${new Date(newDate).getDate()}`));
-
+    const newParseDate = parseDate(newDate);
     props.events[newParseDate] ? setEventExists(true) : setEventExists(false);
   };
 
@@ -57,47 +57,32 @@ const Popup = props => {
     checkEmptiness(event, setEventEmpty);
     checkedEventExists();
 
-    if (
-      !eventEmpty &&
-      !eventExists &&
-      event.trim() 
-    ) {
+    if (!eventEmpty && !eventExists && event.trim()) {
       props.createEvent({
         title: event,
         date,
         names,
         description
       });
-      props.visiblePopup(false);
-      props.setActiveCell(null);
+
       clearValue();
     }
   };
 
-  const onClose = () => {
-    props.visiblePopup(false);
-    props.setActiveCell(null);
-    clearValue();
-  };
+  const onClose = () => clearValue();
 
   const onEdit = () => {
     checkEmptiness(event, setEventEmpty);
     checkedEventExists();
 
-    if (
-      !eventEmpty &&
-      !eventExists &&
-      event.trim()
-    ) {
-
+    if (!eventEmpty && !eventExists && event.trim()) {
       props.editEvent({
         title: event,
         date,
         names,
         description
       });
-      props.visiblePopup(false);
-      props.setActiveCell(null);
+
       clearValue();
     }
   };
@@ -105,100 +90,89 @@ const Popup = props => {
   const onReplacement = () => {
     checkEmptiness(event, setEventEmpty);
 
-    if (
-      !eventEmpty &&
-      event.trim()
-    ) {
-
+    if (!eventEmpty && event.trim()) {
       props.editEvent({
         title: event,
         date,
         names,
         description
       });
-      props.visiblePopup(false);
-      props.setActiveCell(null);
+
       clearValue();
     }
   };
 
   const removeEvent = () => {
     props.removeEvent(props.dateToPicker);
-    props.visiblePopup(false);
-    props.setActiveCell(null);
     clearValue();
   };
 
   return (
-    <div
-      className={cx({
-        wrapper: true,
-        visible: props.isVisible,
-        oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
-        errors: eventEmpty && eventExists
-      })}
-      style={{ left: props.position.wrapperLeft + 'px', top: props.position.wrapperTop + 'px' }}
+    <div  className={cx({
+            wrapper: true,
+            visible: props.isVisible,
+            oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
+            errors: eventEmpty && eventExists
+          })}
+          style={{ left: props.position.wrapperLeft + 'px', top: props.position.wrapperTop + 'px' }}
     >
-      <div className={
-        `${styles.arrow} ${styles[props.position.horizontalDirection]} ${styles[props.position.verticalDirection]}`
-      }></div>
+      <div  className={cx({
+              arrow: true,
+              [props.position.horizontalDirection]: true,
+              [props.position.verticalDirection]: true
+      })}></div>
 
-      <button
-        className={styles.cancel}
-        onClick={onClose}
+      <button className={styles.cancel}
+              onClick={onClose}
       >
         <i className='fa fa-times'></i>
       </button>
 
-      <div className={cx({
-        content: true,
-        oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
-        errors: eventEmpty && eventExists
+      <div  className={cx({
+              content: true,
+              oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
+              errors: eventEmpty && eventExists
       })}>
-        <Input
-          className={styles.field}
-          placeholder='Событие'
-          value={event}
-          onChange={(_name, value) => setEvent(value)}
-          onBlur={() => checkEmptiness(event, setEventEmpty)}
-          isError={eventEmpty}
+        <Input  className={styles.field}
+                placeholder='Событие'
+                value={event}
+                onChange={(_name, value) => setEvent(value)}
+                onBlur={() => checkEmptiness(event, setEventEmpty)}
+                isError={eventEmpty}
         />
 
-        <CustomDatePicker
-          date={date}
-          isError={eventExists}
-          onChange={date => {
-            setDate(parseDate(date));
-            checkedEventExists(parseDate(date));
-          }}
+        <CustomDatePicker date={date}
+                          isError={eventExists}
+                          onChange={date => {
+                            setDate(parseDate(date));
+                            checkedEventExists(parseDate(date));
+                          }}
         />
 
-        <Input
-          className={styles.field}
-          placeholder='Имена участников'
-          value={names}
-          onChange={(_name, value) => setNames(value)}
+        <Input  className={styles.field}
+                placeholder='Имена участников'
+                value={names}
+                onChange={(_name, value) => setNames(value)}
         />
 
-        <textarea
-          className={styles.description}
-          placeholder='Описание'
-          value={description}
-          onChange={e => setDescription(e.target.value)}
+        <textarea className={styles.description}
+                  placeholder='Описание'
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
         />
 
-        <p className={cx({
-          errorPrompt: true,
-          showError: eventEmpty,
-          eventEmpty
+        <p  className={cx({
+              errorPrompt: true,
+              showError: eventEmpty,
+              eventEmpty
         })}>
           Поле события должно быть заполнено
         </p>
 
-        <p className={cx({
-          errorPrompt: true,
-          showError: eventExists,
-          eventExists
+        <p  className={cx({
+              errorPrompt: true,
+              showError: eventExists,
+              eventExists
         })}>
           Событие существует на введенную дату
         </p>
@@ -208,26 +182,23 @@ const Popup = props => {
       {
         !props.events[props.dateToPicker] &&
         <div className={styles.wrapperButtons}>
-          <ButtonIcon
-            className='success'
-            icon='fa fa-pencil'
-            text='Создать'
-            onClick={onSaveEvent}
+          <ButtonIcon className='success'
+                      icon='fa fa-pencil'
+                      text='Создать'
+                      onClick={onSaveEvent}
           />
 
-          <ButtonIcon
-            icon='fa fa-times'
-            text='Отменить'
-            onClick={onClose}
+          <ButtonIcon icon='fa fa-times'
+                      text='Отменить'
+                      onClick={onClose}
           />
 
           {
             eventExists &&
-            <ButtonIcon
-              className='primary'
-              icon='fa fa-cog'
-              text='Заменить'
-              onClick={onReplacement}
+            <ButtonIcon className='primary'
+                        icon='fa fa-cog'
+                        text='Заменить'
+                        onClick={onReplacement}
             />
           }
         </div>
@@ -236,26 +207,23 @@ const Popup = props => {
       {
         props.events[props.dateToPicker] &&
         <div className={styles.wrapperButtons}>
-          <ButtonIcon
-            className='primary'
-            icon='fa fa-cog'
-            text='Редактировать'
-            onClick={onEdit}
+          <ButtonIcon className='primary'
+                      icon='fa fa-cog'
+                      text='Редактировать'
+                      onClick={onEdit}
           />
 
-          <ButtonIcon
-            className='danger'
-            icon='fa fa-trash'
-            text='Удалить'
-            onClick={removeEvent}
+          <ButtonIcon className='danger'
+                      icon='fa fa-trash'
+                      text='Удалить'
+                      onClick={removeEvent}
           />
           {
             eventExists &&
-            <ButtonIcon
-              className='primary'
-              icon='fa fa-cog'
-              text='Заменить'
-              onClick={onReplacement}
+            <ButtonIcon className='primary'
+                        icon='fa fa-cog'
+                        text='Заменить'
+                        onClick={onReplacement}
             />
           }
         </div>
@@ -267,6 +235,7 @@ const Popup = props => {
 const state = state => ({
   events: state.events.events,
   position: state.popup.position,
+  activeCell: state.popup.activeCell,
   dateToPicker: state.popup.dateToPicker
 });
 

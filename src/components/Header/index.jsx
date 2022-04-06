@@ -45,33 +45,35 @@ const Header = ({setSelectedDate, selectedDate}) => {
     <header>
       <div className={styles.container}>
         <div>
-          <Button
-            text={'Добавить'}
-            active={activePopup}
-            onClick={onVisibleShortPopup}
+          <Button text={'Добавить'}
+                  active={activePopup}
+                  onClick={onVisibleShortPopup}
           />
 
-          <Button
-            text={'Обновить'}
-            onClick={() => window.location.reload()}
+          <Button text={'Обновить'}
+                  onClick={() => window.location.reload()}
           />
         </div>
 
         <div className={styles.controlButtons}>
-          <ButtonIcon icon='fa fa-caret-left' onClick={() => changeMonth('-')} />
+          <ButtonIcon icon='fa fa-caret-left'
+                      onClick={() => changeMonth('-')}
+          />
           <span className={styles.date}>{displayDate}</span>
-          <ButtonIcon icon='fa fa-caret-right' onClick={() => changeMonth('+')} />
-          <ButtonIcon text='Текущий месяц' onClick={() => changeMonth()} />
+          <ButtonIcon icon='fa fa-caret-right'
+                      onClick={() => changeMonth('+')}
+          />
+          <ButtonIcon text='Текущий месяц'
+                      onClick={() => changeMonth()}
+          />
         </div>
 
-        <ShortPopup
-          active={activePopup}
-          onVisible={() => setActivePopup(false)}
+        <ShortPopup active={activePopup}
+                    onVisible={() => setActivePopup(false)}
         />
 
-        <Search
-          value={searchValue}
-          onChangeSearch={onChangeSearch}
+        <Search value={searchValue}
+                onChangeSearch={onChangeSearch}
         />
       </div>
     </header>

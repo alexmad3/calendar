@@ -22,11 +22,7 @@ const ShortPopup = props => {
     checkEmptiness();
     checkedEventExists();
 
-    if (
-      !eventEmpty &&
-      !eventExists &&
-      event.trim()
-    ) {
+    if (!eventEmpty && !eventExists && event.trim()) {
       props.createEvent({
         title: event.trim(),
         date: parseDate(date),
@@ -44,7 +40,6 @@ const ShortPopup = props => {
 
   const checkedEventExists = (newDate = date) => {
     const newPatseDate = parseDate(newDate);
-
     props.events[newPatseDate] ? setEventExists(true) : setEventExists(false);
   };
 
@@ -52,16 +47,14 @@ const ShortPopup = props => {
     checkEmptiness();
     checkedEventExists();
 
-    if (
-      !eventEmpty &&
-      event.trim()
-    ) {
+    if (!eventEmpty && event.trim()) {
       props.editEvent({
         title: event.trim(),
         date: parseDate(date),
         names: '',
         description: '',
       });
+
       props.onVisible();
       clearValue();
     }
@@ -85,77 +78,72 @@ const ShortPopup = props => {
   };
 
   return (
-    <div className={cx({
-      wrapper: true,
-      active: props.active,
-      oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
-      errors: eventEmpty && eventExists
+    <div  className={cx({
+            wrapper: true,
+            active: props.active,
+            oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
+            errors: eventEmpty && eventExists
     })}>
       <div className={styles.arrow}></div>
 
-      <button
-        className={styles.cancel}
-        onClick={onClose}
+      <button className={styles.cancel}
+              onClick={onClose}
       >
         <i className='fa fa-times'></i>
       </button>
 
-      <div className={cx({
-        content: true,
-        oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
-        errors: eventEmpty && eventExists
+      <div  className={cx({
+              content: true,
+              oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
+              errors: eventEmpty && eventExists
       })}>
-        <Input
-          placeholder='Событие'
-          value={event}
-          onChange={(_name, value) => setEvent(value)}
-          onBlur={() => {
-            checkEmptiness();
-            checkedEventExists();
-          }}
-          isError={eventEmpty}
+        <Input  placeholder='Событие'
+                value={event}
+                onChange={(_name, value) => setEvent(value)}
+                onBlur={() => {
+                  checkEmptiness();
+                  checkedEventExists();
+                }}
+                isError={eventEmpty}
         />
 
-        <CustomDatePicker
-          date={date}
-          isError={eventExists}
-          onChange={date => {
-            setDate(parseDate(date));
-            checkedEventExists(parseDate(date));
-          }}
+        <CustomDatePicker date={date}
+                          isError={eventExists}
+                          onChange={date => {
+                            setDate(parseDate(date));
+                            checkedEventExists(parseDate(date));
+                          }}
         />
 
-        <p className={cx({
-          errorPrompt: true,
-          showError: eventEmpty,
-          eventEmpty
+        <p  className={cx({
+              errorPrompt: true,
+              showError: eventEmpty,
+              eventEmpty
         })}>
           Поле должно быть заполнено
         </p>
 
-        <p className={cx({
-          errorPrompt: true,
-          showError: eventExists,
-          eventExists
+        <p  className={cx({
+              errorPrompt: true,
+              showError: eventExists,
+              eventExists
         })}>
           Событие существует на введенную дату
         </p>
 
       </div>
       <div className={styles.wrapperButton}>
-        <ButtonIcon
-          className='success'
-          icon='fa fa-pencil'
-          text='Создать'
-          onClick={createEvent}
-          />
+        <ButtonIcon className='success'
+                    icon='fa fa-pencil'
+                    text='Создать'
+                    onClick={createEvent}
+        />
         {
           eventExists &&
-          <ButtonIcon
-            className='primary'
-            icon='fa fa-cog'
-            text='Заменить'
-            onClick={onReplacement}
+          <ButtonIcon className='primary'
+                      icon='fa fa-cog'
+                      text='Заменить'
+                      onClick={onReplacement}
           />
         }
       </div>

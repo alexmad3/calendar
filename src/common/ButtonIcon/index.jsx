@@ -10,16 +10,17 @@ export const ButtonIcon = props =>  {
   }, {});
 
   return (
-    <button
-      className={cx({
-        btn: true,
-        ...classesArray
-      })}
-      onClick={props.onClick}
+    <button className={cx({
+              btn: true,
+              ...classesArray
+            })}
+            onClick={props.onClick}
     >
-      {props.icon && 
-        <i className={props.icon + ' ' + cx({icon: true, mr: props.icon && props.text})}></i>
+      {
+        props.icon && 
+          <i className={props.icon + ' ' + cx({icon: true, mr: props.icon && props.text})}></i>
       }
+
       {props.text}
     </button>
   );
