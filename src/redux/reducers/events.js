@@ -1,4 +1,4 @@
-import { CREATE_EVENT, EDIT_EVENT, REMOVE_EVENT, SET_EVENTS } from "../types";
+import { CREATE_EVENT, EDIT_EVENT, REMOVE_EVENT, GET_EVENTS } from "../types";
 
 const initialState = {
   events: {
@@ -20,12 +20,13 @@ const initialState = {
 export const events = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_EVENT:
-      localStorage.setItem('events', JSON.stringify({...state.events, [action.payload.date]: action.payload}));
-      console.log(localStorage.getItem('events'))
+      localStorage.setItem('events',
+        JSON.stringify({...state.events, [action.payload.date]: action.payload}));
       return { ...state, events: {...state.events, [action.payload.date]: action.payload} };
 
     case EDIT_EVENT:
-      localStorage.setItem('events', JSON.stringify({...state.events, [action.payload.date]: action.payload}));
+      localStorage.setItem('events',
+        JSON.stringify({...state.events, [action.payload.date]: action.payload}));
       return { ...state, events: {...state.events, [action.payload.date]: action.payload} };
 
     case REMOVE_EVENT:
@@ -34,7 +35,7 @@ export const events = (state = initialState, action) => {
       localStorage.setItem('events', JSON.stringify(newState));
       return { ...state, events: newState };
 
-    case SET_EVENTS:
+    case GET_EVENTS:
       return { ...state, events: (JSON.parse(localStorage.getItem('events')) || {}) };
 
     default: return state;

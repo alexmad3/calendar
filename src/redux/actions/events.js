@@ -1,4 +1,4 @@
-import { CREATE_EVENT, EDIT_EVENT, REMOVE_EVENT, SET_EVENTS } from "../types";
+import { CREATE_EVENT, EDIT_EVENT, REMOVE_EVENT, GET_EVENTS } from "../types";
 
 export const createEvent = event => ({
   type: CREATE_EVENT,
@@ -15,7 +15,7 @@ export const removeEvent = id => ({
   payload: id
 });
 
-export const setEvents = events => ({
-  type: SET_EVENTS,
+export const getEvents = events => ({
+  type: GET_EVENTS,
   payload: events
 });

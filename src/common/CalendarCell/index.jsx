@@ -1,9 +1,10 @@
 import classNames from 'classnames/bind';
+import { days } from '../../constants';
 import styles from './CalendarCell.module.sass';
 
 const cx = classNames.bind(styles);
 
-export const CalendarCell = ({day, date, number, event, activeCell, onActive}) =>
+export const CalendarCell = ({date, number, event, activeCell, onActive}) =>
   <div
     className={cx({
       wrapperCell: true,
@@ -13,7 +14,10 @@ export const CalendarCell = ({day, date, number, event, activeCell, onActive}) =
     onClick={(e) => onActive(e, number, date)}
   >
     <p className={styles.day}>
-      {day}
+      {number <= 7 ?
+        `${days[new Date(date).getDay()]} ${new Date(date).getDate()}`
+          :
+        new Date(date).getDate()}
     </p>
 
     {event?.title && <h3>{event.title}</h3>}
