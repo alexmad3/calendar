@@ -11,6 +11,4 @@ export const POSITION_POPUP = 'POSITION_POPUP';
 export const SET_DATE_TO_PICKER = 'SET_DATE_TO_PICKER';
 
 // Calendar
-export const MONTHS = 'MONTHS';
-export const SET_CURRENT_DATE = 'SET_CURRENT_DATE';
-export const GET_ID_EVENT = 'GET_ID_EVENT';
+export const SELECTED_DATE = 'SELECTED_DATE';

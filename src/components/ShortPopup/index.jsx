@@ -17,7 +17,6 @@ const ShortPopup = props => {
   const [eventEmpty, setEventEmpty] = useState(false);
   const [date, setDate] = useState(parseDate());
   const [eventExists, setEventExists] = useState(false);
-  const [eventExistsId, setEventExistsId] = useState('');
 
   const createEvent = () => {
     checkEmptiness();
@@ -28,16 +27,7 @@ const ShortPopup = props => {
       !eventExists &&
       event.trim()
     ) {
-      let id = 0;
-
-      props.events.forEach(event => {
-        if (event.id > id) {
-          id = event.id
-        }
-      });
-
       props.createEvent({
-        id: id + 1,
         title: event.trim(),
         date: parseDate(date),
         names: '',
@@ -55,16 +45,7 @@ const ShortPopup = props => {
   const checkedEventExists = (newDate = date) => {
     const newPatseDate = parseDate(newDate);
 
-    for (let i = 0; i < props.events.length; i++) {
-      if (newPatseDate === props.events[i].date) {
-        setEventExistsId(props.events[i].id);
-        setEventExists(true);
-        return;
-      }
-    }
-
-    setEventExistsId('');
-    setEventExists(false);
+    props.events[newPatseDate] ? setEventExists(true) : setEventExists(false);
   };
 
   const onReplacement = () => {
@@ -76,7 +57,6 @@ const ShortPopup = props => {
       event.trim()
     ) {
       props.editEvent({
-        id: eventExistsId,
         title: event.trim(),
         date: parseDate(date),
         names: '',
@@ -92,7 +72,6 @@ const ShortPopup = props => {
     setDate(parseDate());
     setEventEmpty(false);
     setEventExists(false);
-    setEventExistsId('');
   }, []);
 
   useEffect(() => {

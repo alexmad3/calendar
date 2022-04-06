@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { CalendarCell } from '../../common/CalendarCell';
 import { setActiveCell, setPositionPopup, visiblePopup, setDateToPicker } from '../../redux/actions/popup';
-import { getIdEvent } from '../../redux/actions/calendar';
 import { setEvents } from '../../redux/actions/events';
 import { days } from '../../constants';
 import styles from './Calendar.module.sass';
@@ -21,59 +20,33 @@ const Calendar = props => {
       firstDay = 7;
     }
 
-    prevDays:
     for (let i = firstDay; i > 1; i--) {
-      for (let j = 0; j < props.events.length; j++) {
-        if (new Date(year, month, (i * (-1)) + 2).setHours(0, 0, 0, 0) === new Date(props.events[j].date).setHours(0, 0, 0, 0)) {
-          monthData.push({
-            date: new Date(new Date(year, month, (i * (-1)) + 2)),
-            title: props.events[j].title,
-            names: props.events[j].names,
-            idEvent: props.events[j].id
-          });
-          continue prevDays;
-        }
-      }
-      monthData.push({ date: new Date(new Date(year, month, (i * (-1)) + 2)) });
+      monthData.push({
+        date: new Date(new Date(year, month, (i * (-1)) + 2)),
+        event: props.events[+(new Date(year, month, (i * (-1)) + 2))]
+      });
     }
 
-    presDays:
     for (let i = 1; i <= 31; i++) {
       if (i > 28 && (new Date(new Date(year, month, i)).getMonth() !== month)) {
         lastDate = i - 1;
         break;
       } else {
         lastDate = i;
-        for (let j = 0; j < props.events.length; j++) {
-          if (new Date(year, month, i).setHours(0, 0, 0, 0) === new Date(props.events[j].date).setHours(0, 0, 0, 0)) {
-            monthData.push({
-              date: new Date(new Date(year, month, i)),
-              title: props.events[j].title,
-              names: props.events[j].names,
-              idEvent: props.events[j].id
-            });
-            continue presDays;
-          }
-        }
-        monthData.push({ date: new Date(new Date(year, month, i)) });
+
+        monthData.push({
+          date: new Date(new Date(year, month, i)),
+          event: props.events[+(new Date(year, month, i))]
+        });
       }
     }
 
     if (new Date(year, month, lastDate).getDay() !== 0) {
-      futDays:
       for (let i = 1; i <= 7 - new Date(year, month, lastDate).getDay(); i++) {
-        for (let j = 0; j < props.events.length; j++) {
-          if (new Date(year, month + 1, i).setHours(0, 0, 0, 0) === new Date(props.events[j].date).setHours(0, 0, 0, 0)) {
-            monthData.push({
-              date: new Date(new Date(year, month + 1, i)),
-              title: props.events[j].title,
-              names: props.events[j].names,
-              idEvent: props.events[j].id
-            });
-            continue futDays;
-          }
-        }
-        monthData.push({ date: new Date(new Date(year, month + 1, i)) });
+        monthData.push({
+          date: new Date(new Date(year, month + 1, i)),
+          event: props.events[+(new Date(year, month + 1, i))]
+        });
       }
     }
 
@@ -91,10 +64,10 @@ const Calendar = props => {
     props.setActiveCell(null);
   }, [props.selectedDate, props.events]);
 
-  const setActiveCell = (e, activeCell, number, idEvent = null, date) => {
-    if (activeCell !== props.activeCell || idEvent) {
+  const setActiveCell = (e, number, date) => {
+    if (date !== props.activeCell) {
       props.onClickCell(true);
-      props.setActiveCell(activeCell);
+      props.setActiveCell(date);
       props.setDateToPicker(date);
 
       const parent = e.target.parentNode.getBoundingClientRect(),
@@ -131,7 +104,6 @@ const Calendar = props => {
       }
 
       props.setPositionPopup({ wrapperTop, wrapperLeft, horizontalDirection, verticalDirection });
-      props.getIdEvent(idEvent);
     }
   };
 
@@ -143,26 +115,20 @@ const Calendar = props => {
             return <CalendarCell
               day={`${days[new Date(el.date).getDay()]} ${new Date(el.date).getDate()}`}
               date={+el.date}
-              title={el.title}
-              names={el.names}
-              id={+el.date}
+              event={el.event}
               activeCell={props.activeCell}
               onActive={setActiveCell}
               number={i + 1}
-              idEvent={el.idEvent}
               key={+el.date}
             />
           } else {
             return <CalendarCell
               day={new Date(el.date).getDate()}
               date={+el.date}
-              title={el.title}
-              names={el.names}
-              id={+el.date}
+              event={el.event}
               activeCell={props.activeCell}
               onActive={setActiveCell}
               number={i + 1}
-              idEvent={el.idEvent}
               key={+el.date}
             />
           }
@@ -182,7 +148,6 @@ const dispatch = {
   setActiveCell,
   setPositionPopup,
   visiblePopup,
-  getIdEvent,
   setEvents,
   setDateToPicker
 };

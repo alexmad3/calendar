@@ -1,11 +1,7 @@
-import { SET_CURRENT_DATE, GET_ID_EVENT } from "../types";
+import { SELECTED_DATE } from "../types";
 
 export const setSelectedDate = date => ({
-  type: SET_CURRENT_DATE,
+  type: SELECTED_DATE,
   payload: date
 });
 
-export const getIdEvent = id => ({
-  type: GET_ID_EVENT,
-  payload: id
-});

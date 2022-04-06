@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { visiblePopup, setActiveCell } from '../../redux/actions/popup';
 import { createEvent, editEvent, removeEvent } from '../../redux/actions/events';
-import { getIdEvent } from '../../redux/actions/calendar';
 import { ButtonIcon } from '../../common/ButtonIcon';
 import { Input } from '../../common/Input';
 import { CustomDatePicker } from '../../common/CustomDatePicker';
@@ -21,38 +20,25 @@ const Popup = props => {
   const [description, setDescription] = useState('');
   const [eventEmpty, setEventEmpty] = useState(false);
   const [eventExists, setEventExists] = useState(false);
-  const [eventExistsId, setEventExistsId] = useState('');
 
   const updateStateInputs = useCallback(() => {
-    if (props.idEvent) {
-      let event = props.events.find(event => event.id === props.idEvent);
-
-      setEvent(event.title);
-      setDate(parseDate(event.date));
-      setNames(event.names);
-      setDescription(event.description);
-      setEventExistsId('');
-    } else {
-      setEvent('');
-      setDate(parseDate(props.dateToPicker));
-      setNames('');
-      setDescription('');
-      setEventExistsId('');
-    }
-  }, [props.idEvent, props.events, props.dateToPicker]);
+    setEvent(props.events[props.dateToPicker]?.title || '');
+    setDate(parseDate(props.dateToPicker));
+    setNames(props.events[props.dateToPicker]?.names || '');
+    setDescription(props.events[props.dateToPicker]?.description || '');
+  }, [props.events, props.dateToPicker]);
 
   useEffect(() => {
     updateStateInputs();
     setEventEmpty(false);
     setEventExists(false);
-  }, [props.idEvent, updateStateInputs]);
+  }, [updateStateInputs]);
 
   const clearValue = () => {
     setEvent('');
     setDate(parseDate());
     setNames('');
     setDescription('');
-    setEventExistsId('');
     setEventEmpty(false);
     setEventExists(false);
   };
@@ -64,16 +50,7 @@ const Popup = props => {
     const newParseDate =
       +(new Date(`${new Date(newDate).getFullYear()}-${new Date(newDate).getMonth() + 1}-${new Date(newDate).getDate()}`));
 
-    for (let i = 0; i < props.events.length; i++) {
-      if (newParseDate === props.events[i].date && props.idEvent !== props.events[i].id) {
-        setEventExistsId(props.events[i].id);
-        setEventExists(true);
-        return;
-      }
-    }
-
-    setEventExistsId('');
-    setEventExists(false);
+    props.events[newParseDate] ? setEventExists(true) : setEventExists(false);
   };
 
   const onSaveEvent = () => {
@@ -85,16 +62,7 @@ const Popup = props => {
       !eventExists &&
       event.trim() 
     ) {
-      let id = 0;
-
-      props.events.forEach(event => {
-        if (event.id > id) {
-          id = event.id
-        }
-      });
-
       props.createEvent({
-        id: id + 1,
         title: event,
         date,
         names,
@@ -103,7 +71,6 @@ const Popup = props => {
       props.visiblePopup(false);
       props.setActiveCell(null);
       clearValue();
-      props.getIdEvent(null);
     }
   };
 
@@ -111,7 +78,6 @@ const Popup = props => {
     props.visiblePopup(false);
     props.setActiveCell(null);
     clearValue();
-    props.getIdEvent(null);
   };
 
   const onEdit = () => {
@@ -125,7 +91,6 @@ const Popup = props => {
     ) {
 
       props.editEvent({
-        id: props.idEvent,
         title: event,
         date,
         names,
@@ -134,7 +99,6 @@ const Popup = props => {
       props.visiblePopup(false);
       props.setActiveCell(null);
       clearValue();
-      props.getIdEvent(null);
     }
   };
 
@@ -147,7 +111,6 @@ const Popup = props => {
     ) {
 
       props.editEvent({
-        id: eventExistsId,
         title: event,
         date,
         names,
@@ -156,16 +119,14 @@ const Popup = props => {
       props.visiblePopup(false);
       props.setActiveCell(null);
       clearValue();
-      props.getIdEvent(null);
     }
   };
 
   const removeEvent = () => {
-    props.removeEvent(props.idEvent);
+    props.removeEvent(props.dateToPicker);
     props.visiblePopup(false);
     props.setActiveCell(null);
     clearValue();
-    props.getIdEvent(null);
   };
 
   return (
@@ -245,7 +206,7 @@ const Popup = props => {
 
 
       {
-        !props.idEvent &&
+        !props.events[props.dateToPicker] &&
         <div className={styles.wrapperButtons}>
           <ButtonIcon
             className='success'
@@ -273,7 +234,7 @@ const Popup = props => {
       }
 
       {
-        props.idEvent &&
+        props.events[props.dateToPicker] &&
         <div className={styles.wrapperButtons}>
           <ButtonIcon
             className='primary'
@@ -306,7 +267,6 @@ const Popup = props => {
 const state = state => ({
   events: state.events.events,
   position: state.popup.position,
-  idEvent: state.calendar.idEvent,
   dateToPicker: state.popup.dateToPicker
 });
 
@@ -314,7 +274,6 @@ const dispatch = {
   visiblePopup,
   setActiveCell,
   createEvent,
-  getIdEvent,
   editEvent,
   removeEvent
 };
