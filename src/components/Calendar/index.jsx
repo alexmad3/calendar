@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import { CalendarCell } from '../../common/CalendarCell';
 import {
   setActiveCell,
-  setPositionPopup,
-  visiblePopup,
+  visibleModalEvent,
   setDateToPicker
-} from '../../redux/actions/popup';
+} from '../../redux/actions/modalEvent';
 import styles from './Calendar.module.sass';
 
 const Calendar = props => {
@@ -58,50 +57,15 @@ const Calendar = props => {
 
   useEffect(() => {
     calendarCalculation();
-    props.visiblePopup(false);
+    props.visibleModalEvent(false);
     props.setActiveCell(null);
   }, [calendarCalculation]);
 
-  const setActiveCell = (e, number, date) => {
+  const setActiveCell = date => {
     if (date !== props.activeCell) {
       props.onClickCell(true);
       props.setActiveCell(date);
       props.setDateToPicker(date);
-
-      const parent = e.target.parentNode.getBoundingClientRect(),
-            element = e.target.getBoundingClientRect();
-
-      let wrapperTop,
-          wrapperLeft,
-          horizontalDirection,
-          verticalDirection,
-          lines = document.querySelector(`.${styles.calendar}`).children.length / 7;
-
-      if ((parent.right - (element.left + 576 + e.target.offsetWidth)) > 0) {
-        wrapperLeft = element.left + 30 + e.target.offsetWidth;
-        horizontalDirection = 'left';
-      } else {
-        wrapperLeft = element.left - 576;
-        horizontalDirection = 'right';
-      }
-
-      if (number / 7 <= lines - 2) {
-        if (number % 7 === 0) {
-          wrapperTop = Math.floor(number / 7) * 250 + 112 - 250;
-        } else {
-          wrapperTop = Math.floor(number / 7) * 250 + 112;
-        }
-        verticalDirection = 'top';
-      } else {
-        if (number % 7 === 0) {
-          wrapperTop = (Math.floor(number / 7) * 250 + 112) - (482 - 250) - 250;
-        } else {
-          wrapperTop = (Math.floor(number / 7) * 250 + 112) - (482 - 250);
-        }
-        verticalDirection = 'bottom';
-      }
-
-      props.setPositionPopup({ wrapperTop, wrapperLeft, horizontalDirection, verticalDirection });
     }
   };
 
@@ -138,14 +102,13 @@ const Calendar = props => {
 
 const state = state => ({
   events: state.events.events,
-  activeCell: state.popup.activeCell,
+  activeCell: state.modalEvent.activeCell,
   selectedDate: state.calendar.selectedDate
 });
 
 const dispatch = {
   setActiveCell,
-  setPositionPopup,
-  visiblePopup,
+  visibleModalEvent,
   setDateToPicker
 };
 

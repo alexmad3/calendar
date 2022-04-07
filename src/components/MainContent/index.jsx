@@ -1,32 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Calendar from '../Calendar';
-import Popup from '../Popup';
-import { visiblePopup } from '../../redux/actions/popup';
+import ModalEvent from '../ModalEvent';
+import { visibleModalEvent } from '../../redux/actions/modalEvent';
 import styles from './MainContent.module.sass';
 
-const MainContent = ({ visiblePopup, isVisiblePopup}) => {
+const MainContent = ({ visibleModalEvent, isVisibleModalEvent}) => {
   const onClickCell = isVisible => {
-    visiblePopup(isVisible);
+    visibleModalEvent(isVisible);
   };
 
   return (
     <div className={styles.container}>
       <Calendar onClickCell={onClickCell} />
 
-      <Popup  isVisible={isVisiblePopup}
-              close={onClickCell}
+      <ModalEvent isVisible={isVisibleModalEvent}
+                  close={onClickCell}
       />
     </div>
   );
 }
 
 const state = state => ({
-  isVisiblePopup: state.popup.isVisible
+  isVisibleModalEvent: state.modalEvent.isVisible
 });
 
 const dispatch = {
-  visiblePopup
+  visibleModalEvent
 };
 
 export default connect(state, dispatch)(MainContent);

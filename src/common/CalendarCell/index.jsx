@@ -10,7 +10,7 @@ export const CalendarCell = ({date, number, event, activeCell, onActive}) =>
           event: event?.title,
           activeCell: activeCell === date
         })}
-        onClick={(e) => onActive(e, number, date)}
+        onClick={() => onActive(date)}
   >
     <p className={styles.day}>
       {

@@ -13,10 +13,10 @@ const ShortPopup = props => {
   const parseDate = (date = new Date()) =>
     +(new Date(`${new Date(date).getFullYear()}-${new Date(date).getMonth() + 1}-${new Date(date).getDate()}`));
 
-  const [event, setEvent] = useState('');
-  const [eventEmpty, setEventEmpty] = useState(false);
-  const [date, setDate] = useState(parseDate());
-  const [eventExists, setEventExists] = useState(false);
+  const [event, setEvent] = useState(''),
+        [eventEmpty, setEventEmpty] = useState(false),
+        [date, setDate] = useState(parseDate()),
+        [eventExists, setEventExists] = useState(false);
 
   const createEvent = () => {
     checkEmptiness();

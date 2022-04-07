@@ -9,9 +9,9 @@ import { months } from '../../constants';
 import styles from './Header.module.sass';
 
 const Header = ({setSelectedDate, selectedDate}) => {
-  const [activePopup, setActivePopup] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-  const [displayDate, setDisplayDate] = useState('');
+  const [activePopup, setActivePopup] = useState(false),
+        [searchValue, setSearchValue] = useState(''),
+        [displayDate, setDisplayDate] = useState('');
 
   const onVisibleShortPopup = () => {
     setActivePopup(!activePopup);
