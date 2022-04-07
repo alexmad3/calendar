@@ -8,13 +8,13 @@ import {
 } from '../../redux/actions/modalEvent';
 import styles from './Calendar.module.sass';
 
-const Calendar = props => {
+const Calendar = ({selectedDate, events, activeCell, setDateToPicker, setActiveCell, visibleModalEvent, onClickCell}) => {
   const [displayCell, setDisplayCell] = useState([]);
 
   const calendarCalculation = useCallback(() => {
-    let firstDay = new Date(new Date(props.selectedDate).setDate(1)).getDay(),
-        year = new Date(props.selectedDate).getFullYear(),
-        month = new Date(props.selectedDate).getMonth(),
+    let firstDay = new Date(new Date(selectedDate).setDate(1)).getDay(),
+        year = new Date(selectedDate).getFullYear(),
+        month = new Date(selectedDate).getMonth(),
         monthData = [],
         lastDate;
 
@@ -24,8 +24,8 @@ const Calendar = props => {
 
     for (let i = firstDay; i > 1; i--) {
       monthData.push({
-        date: new Date(new Date(year, month, (i * (-1)) + 2)),
-        event: props.events[+(new Date(year, month, (i * (-1)) + 2))]
+        date: new Date(year, month, (i * (-1)) + 2),
+        event: events[+(new Date(year, month, (i * (-1)) + 2))]
       });
     }
 
@@ -37,8 +37,8 @@ const Calendar = props => {
         lastDate = i;
 
         monthData.push({
-          date: new Date(new Date(year, month, i)),
-          event: props.events[+(new Date(year, month, i))]
+          date: new Date(year, month, i),
+          event: events[+(new Date(year, month, i))]
         });
       }
     }
@@ -46,26 +46,26 @@ const Calendar = props => {
     if (new Date(year, month, lastDate).getDay() !== 0) {
       for (let i = 1; i <= 7 - new Date(year, month, lastDate).getDay(); i++) {
         monthData.push({
-          date: new Date(new Date(year, month + 1, i)),
-          event: props.events[+(new Date(year, month + 1, i))]
+          date: new Date(year, month + 1, i),
+          event: events[+(new Date(year, month + 1, i))]
         });
       }
     }
 
     setDisplayCell(monthData);
-  }, [props.selectedDate, props.events]);
+  }, [selectedDate, events]);
 
   useEffect(() => {
     calendarCalculation();
-    props.visibleModalEvent(false);
-    props.setActiveCell(null);
-  }, [calendarCalculation]);
+    visibleModalEvent(false);
+    setActiveCell(null);
+  }, [calendarCalculation, visibleModalEvent, setActiveCell]);
 
-  const setActiveCell = date => {
-    if (date !== props.activeCell) {
-      props.onClickCell(true);
-      props.setActiveCell(date);
-      props.setDateToPicker(date);
+  const onSelectCell = date => {
+    if (date !== activeCell) {
+      onClickCell(true);
+      setActiveCell(date);
+      setDateToPicker(date);
     }
   };
 
@@ -77,8 +77,8 @@ const Calendar = props => {
             return (
               <CalendarCell date={+el.date}
                             event={el.event}
-                            activeCell={props.activeCell}
-                            onActive={setActiveCell}
+                            activeCell={activeCell}
+                            onActive={onSelectCell}
                             number={i + 1}
                             key={+el.date}
               />
@@ -87,8 +87,8 @@ const Calendar = props => {
             return (
               <CalendarCell date={+el.date}
                             event={el.event}
-                            activeCell={props.activeCell}
-                            onActive={setActiveCell}
+                            activeCell={activeCell}
+                            onActive={onSelectCell}
                             number={i + 1}
                             key={+el.date}
               />
