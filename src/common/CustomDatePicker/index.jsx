@@ -32,8 +32,8 @@ export const CustomDatePicker = ({date, onChange, isError}) => {
       <DatePicker selected={date}
                   onChange={date => onChange(date)}
                   customInput={<ExampleCustomInput />}
-                  dateFormat="dd.MM.yyyy"
+                  dateFormat='dd.MM.yyyy'
       />
     </div>
   );
-}
+};

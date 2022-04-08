@@ -9,6 +9,6 @@ export const Input = props =>
           placeholder={props.placeholder}
           value={props.value}
           name={props.name}
-          onChange={(e) => props.onChange(props.name, e.target.value)}
+          onChange={e => props.onChange(props.name, e.target.value)}
           onBlur={props.onBlur}
   />;
