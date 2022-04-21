@@ -5,7 +5,7 @@ import { compose, createStore } from 'redux';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { rootReducer } from './redux/rootReducer';
-import './index.css';
+import './index.sass';
 
 const store = createStore(
   rootReducer,
