@@ -5,17 +5,15 @@ import { createEvent, editEvent, removeEvent } from '../../redux/actions/events'
 import { ButtonIcon } from '../../common/ButtonIcon';
 import { Input } from '../../common/Input';
 import { CustomDatePicker } from '../../common/CustomDatePicker';
+import { dateToNumDate } from '../../utilities';
 import classNames from 'classnames/bind';
 import styles from './ModalEvent.module.sass';
 
 const cx = classNames.bind(styles);
 
 const ModalEvent = props => {
-  const parseDate = (date = new Date()) =>
-    +(new Date(`${new Date(date).getFullYear()}-${new Date(date).getMonth() + 1}-${new Date(date).getDate()}`));
-
   const [event, setEvent] = useState(''),
-        [date, setDate] = useState(parseDate()),
+        [date, setDate] = useState(dateToNumDate()),
         [names, setNames] = useState(''),
         [description, setDescription] = useState(''),
         [eventEmpty, setEventEmpty] = useState(false),
@@ -23,7 +21,7 @@ const ModalEvent = props => {
 
   const updateStateInputs = useCallback(() => {
     setEvent(props.events[props.dateToPicker]?.title || '');
-    setDate(parseDate(props.dateToPicker));
+    setDate(dateToNumDate(props.dateToPicker));
     setNames(props.events[props.dateToPicker]?.names || '');
     setDescription(props.events[props.dateToPicker]?.description || '');
   }, [props.events, props.dateToPicker]);
@@ -38,7 +36,7 @@ const ModalEvent = props => {
     name.trim() ? setError(false) : setError(true);
 
   const checkedEventExists = (newDate = date) => {
-    const newParseDate = parseDate(newDate);
+    const newParseDate = dateToNumDate(newDate);
     props.events[newParseDate] ? setEventExists(true) : setEventExists(false);
   };
 
@@ -54,7 +52,7 @@ const ModalEvent = props => {
 
     if (!eventEmpty && event.trim()) {
       props[method]({
-        title: event,
+        title: event.trim(),
         date,
         names,
         description
@@ -68,6 +66,23 @@ const ModalEvent = props => {
     props.removeEvent(date);
     onClose();
   };
+
+  const onChangeEventName = (_name, value) => setEvent(value);
+
+  const onControlEvents = () => checkEmptiness(event, setEventEmpty);
+
+  const onChangeEventDate = newDate => {
+    setDate(dateToNumDate(newDate));
+    checkedEventExists(dateToNumDate(newDate));
+  };
+
+  const onChangeEventParticipant = (_name, value) => setNames(value);
+
+  const onChangeEventDescription = e => setDescription(e.target.value);
+
+  const onCreateEvent = () => onSubmit('createEvent');
+
+  const onEditEvent = () => onSubmit('editEvent');
 
   return (
     <div  className={cx({
@@ -101,29 +116,26 @@ const ModalEvent = props => {
           <Input  className={styles.field}
                   placeholder='Событие'
                   value={event}
-                  onChange={(_name, value) => setEvent(value)}
-                  onBlur={() => checkEmptiness(event, setEventEmpty)}
+                  onChange={onChangeEventName}
+                  onBlur={onControlEvents}
                   isError={eventEmpty}
           />
 
           <CustomDatePicker date={date}
                             isError={eventExists}
-                            onChange={date => {
-                              setDate(parseDate(date));
-                              checkedEventExists(parseDate(date));
-                            }}
+                            onChange={onChangeEventDate}
           />
 
           <Input  className={styles.field}
                   placeholder='Имена участников'
                   value={names}
-                  onChange={(_name, value) => setNames(value)}
+                  onChange={onChangeEventParticipant}
           />
 
           <textarea className={styles.description}
                     placeholder='Описание'
                     value={description}
-                    onChange={e => setDescription(e.target.value)}
+                    onChange={onChangeEventDescription}
           />
 
           <p  className={cx({
@@ -145,43 +157,42 @@ const ModalEvent = props => {
           </p>
         </div>
 
+        <div className={styles.wrapperButtons}>
+          {
+            !(props.activeCell === props.events[date]?.date || date === props.events[date]?.date) ?
+              <ButtonIcon className='success'
+                          icon='fa fa-pencil'
+                          text='Создать'
+                          onClick={onCreateEvent}
+              />
 
-        {
-          !(props.activeCell === props.events[date]?.date || date === props.events[date]?.date) ?
-          <div className={styles.wrapperButtons}>
-            <ButtonIcon className='success'
-                        icon='fa fa-pencil'
-                        text='Создать'
-                        onClick={() => onSubmit('createEvent')}
-            />
+                :
 
-            <ButtonIcon icon='fa fa-times'
-                        text='Отменить'
-                        onClick={onClose}
-            />
-          </div>
+              <ButtonIcon className='primary'
+                          icon='fa fa-cog'
+                          text='Перезаписать'
+                          onClick={onEditEvent}
+              />
+          }
 
-            :
+          <ButtonIcon icon='fa fa-times'
+                      text='Отменить'
+                      onClick={onClose}
+          />
 
-          <div className={styles.wrapperButtons}>
-            <ButtonIcon className='primary'
-                        icon='fa fa-cog'
-                        text='Перезаписать'
-                        onClick={() => onSubmit('editEvent')}
-            />
+          {
+            !(props.activeCell === props.events[date]?.date || date === props.events[date]?.date) ?
+              null
 
-            <ButtonIcon icon='fa fa-times'
-                        text='Отменить'
-                        onClick={onClose}
-            />
+                :
 
-            <ButtonIcon className='danger'
-                        icon='fa fa-trash'
-                        text='Удалить'
-                        onClick={onRemove}
-            />
-          </div>
-        }
+              <ButtonIcon className='danger'
+                          icon='fa fa-trash'
+                          text='Удалить'
+                          onClick={onRemove}
+              />
+          }
+        </div>
       </div>
     </div>
   );

@@ -4,28 +4,26 @@ import { createEvent, editEvent } from '../../redux/actions/events';
 import { ButtonIcon } from '../../common/ButtonIcon';
 import { Input } from '../../common/Input';
 import { CustomDatePicker } from '../../common/CustomDatePicker';
+import { dateToNumDate } from '../../utilities';
 import classNames from 'classnames/bind';
 import styles from './ShortPopup.module.sass';
 
 const cx = classNames.bind(styles);
 
 const ShortPopup = props => {
-  const parseDate = (date = new Date()) =>
-    +(new Date(`${new Date(date).getFullYear()}-${new Date(date).getMonth() + 1}-${new Date(date).getDate()}`));
-
   const [event, setEvent] = useState(''),
         [eventEmpty, setEventEmpty] = useState(false),
-        [date, setDate] = useState(parseDate()),
+        [date, setDate] = useState(dateToNumDate()),
         [eventExists, setEventExists] = useState(false);
 
-  const createEvent = () => {
+  const onSubmit = method => {
     checkEmptiness();
     checkedEventExists();
 
     if (!eventEmpty && !eventExists && event.trim()) {
-      props.createEvent({
+      props[method]({
         title: event.trim(),
-        date: parseDate(date),
+        date,
         names: '',
         description: '',
       });
@@ -34,48 +32,47 @@ const ShortPopup = props => {
       clearValue();
     }
   };
+
+  const onCreateEvent = () => onSubmit('createEvent');
+
+  const onEditEvent = () => onSubmit('editEvent');
 
   const checkEmptiness = () =>
     event.trim() ? setEventEmpty(false) : setEventEmpty(true);
 
   const checkedEventExists = (newDate = date) => {
-    const newPatseDate = parseDate(newDate);
+    const newPatseDate = dateToNumDate(newDate);
     props.events[newPatseDate] ? setEventExists(true) : setEventExists(false);
   };
 
-  const onReplacement = () => {
+  const onChangeEventName = (_name, value) => setEvent(value);
+
+  const onControlEvents = () => {
     checkEmptiness();
     checkedEventExists();
+  };
 
-    if (!eventEmpty && event.trim()) {
-      props.editEvent({
-        title: event.trim(),
-        date: parseDate(date),
-        names: '',
-        description: '',
-      });
-
-      props.onVisible();
-      clearValue();
-    }
+  const onChangeEventDate = newDate => {
+    setDate(dateToNumDate(newDate));
+    checkedEventExists(dateToNumDate(newDate));
   };
 
   const clearValue = useCallback(() => {
     setEvent('');
-    setDate(parseDate());
+    setDate(dateToNumDate());
     setEventEmpty(false);
     setEventExists(false);
   }, []);
-
-  useEffect(() => {
-    if (!props.active)
-      clearValue();
-  }, [props.active, clearValue]);
 
   const onClose = () => {
     props.onVisible();
     clearValue();
   };
+
+  useEffect(() => {
+    if (!props.active)
+      clearValue();
+  }, [props.active, clearValue]);
 
   return (
     <div  className={cx({
@@ -99,20 +96,14 @@ const ShortPopup = props => {
       })}>
         <Input  placeholder='Событие'
                 value={event}
-                onChange={(_name, value) => setEvent(value)}
-                onBlur={() => {
-                  checkEmptiness();
-                  checkedEventExists();
-                }}
+                onChange={onChangeEventName}
+                onBlur={onControlEvents}
                 isError={eventEmpty}
         />
 
         <CustomDatePicker date={date}
                           isError={eventExists}
-                          onChange={date => {
-                            setDate(parseDate(date));
-                            checkedEventExists(parseDate(date));
-                          }}
+                          onChange={onChangeEventDate}
         />
 
         <p  className={cx({
@@ -136,14 +127,14 @@ const ShortPopup = props => {
         <ButtonIcon className='success'
                     icon='fa fa-pencil'
                     text='Создать'
-                    onClick={createEvent}
+                    onClick={onCreateEvent}
         />
         {
           eventExists &&
           <ButtonIcon className='primary'
                       icon='fa fa-cog'
                       text='Заменить'
-                      onClick={onReplacement}
+                      onClick={onEditEvent}
           />
         }
       </div>
