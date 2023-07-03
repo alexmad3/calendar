@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { getEvents } from './redux/actions/events';
-import Header from './components/Header';
+import TopMenu from './components/TopMenu';
 import MainContent from './components/MainContent';
 import { useEffect } from 'react';
 
@@ -12,7 +12,7 @@ const App = ({getEvents}) => {
 
   return (
     <>
-      <Header />
+      <TopMenu />
       <MainContent />
     </>
   );

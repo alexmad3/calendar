@@ -1,26 +1,28 @@
+@import 'src/sass/vars'
+
 .wrapperCell
-  border: 1px solid #bebfbf
+  border: $border-base
   padding: 0 1rem
-  transition: .15s
+  transition: $transition
   user-select: none
 
   &:hover
-    background-color: #1f98ec
-    border-color: #1f98ec
-    box-shadow: 0 0 8px #1f98ec
+    background-color: $primary
+    border-color: $primary
+    box-shadow: $box-shadow-size-blurred $primary
     z-index: 1
     cursor: pointer
 
     .day
-      color: white
+      color: $white
 
 
 .day
-  color: #696969
+  color: $dimgray
 
 .event
-  background: #a8d5f5
+  background-color: $sub-primary
 
 .activeCell
-  background: #e6f4fd
-  border: 1px solid #1f98ec
+  background-color: $bg-active-cell
+  border: $border-width-base $border-style-base $primary

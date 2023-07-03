@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { Button } from '../../common/Button';
 import { ButtonIcon } from '../../common/ButtonIcon';
 import { Search } from '../Search';
-import ShortPopup from '../ShortPopup';
+import PopupEvent from '../PopupEvent';
 import { setSelectedDate } from '../../redux/actions/calendar';
 import { months } from '../../constants';
-import styles from './Header.module.sass';
+import styles from './TopMenu.module.sass';
 
-const Header = ({setSelectedDate, selectedDate}) => {
+const TopMenu = ({setSelectedDate, selectedDate}) => {
   const [activePopup, setActivePopup] = useState(false),
         [searchValue, setSearchValue] = useState(''),
         [displayDate, setDisplayDate] = useState('');
@@ -68,7 +68,7 @@ const Header = ({setSelectedDate, selectedDate}) => {
           />
         </div>
 
-        <ShortPopup active={activePopup}
+        <PopupEvent active={activePopup}
                     onVisible={() => setActivePopup(false)}
         />
 
@@ -88,4 +88,4 @@ const dispatch = {
   setSelectedDate
 };
 
-export default connect(state, dispatch)(Header);
+export default connect(state, dispatch)(TopMenu);

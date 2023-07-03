@@ -1,27 +1,29 @@
+@import 'src/sass/vars'
+
 .button
   padding: 9px 18px
-  background-color: #109bf8
-  color: white
-  border: 1px solid #109bf8
-  border-radius: 3px
+  background-color: $primary
+  color: $white
+  border: $border-width-base $border-style-base $btn-border-color-primary
+  border-radius: $border-radius
   cursor: pointer
-  transition: all .15s
+  transition: $transition
   font-size: medium
   font-weight: bold
   outline: none
 
   &:hover
-    background-color: #0d7bc4
+    background-color: $btn-bg-color-primary-hover
 
   &:active
-    background-color: #0d5ca2
-    border-color: #0c5596
+    background-color: $btn-bg-color-primary-active
+    border-color: $btn-border-color-primary-active
 
   &:focus
-    box-shadow: 0 0 0 3px #7fbbe6
+    box-shadow: $box-shadow-size $sub-primary
 
   &:not(:last-child)
     margin-right: 1rem
 
 .active
-  background-color: #0d5ca2
+  background-color: $btn-bg-color-primary-active

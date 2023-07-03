@@ -6,11 +6,11 @@ import { Input } from '../../common/Input';
 import { CustomDatePicker } from '../../common/CustomDatePicker';
 import { dateToNumDate } from '../../utilities';
 import classNames from 'classnames/bind';
-import styles from './ShortPopup.module.sass';
+import styles from './PopupEvent.module.sass';
 
 const cx = classNames.bind(styles);
 
-const ShortPopup = props => {
+const PopupEvent = props => {
   const [event, setEvent] = useState(''),
         [eventEmpty, setEventEmpty] = useState(false),
         [date, setDate] = useState(dateToNumDate()),
@@ -123,7 +123,7 @@ const ShortPopup = props => {
         </p>
 
       </div>
-      <div className={styles.wrapperButton}>
+      <div className={styles.actions}>
         <ButtonIcon className='success'
                     icon='fa fa-pencil'
                     text='Создать'
@@ -151,4 +151,4 @@ const dispatch = {
   editEvent
 };
 
-export default connect(state, dispatch)(ShortPopup);
+export default connect(state, dispatch)(PopupEvent);

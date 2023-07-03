@@ -1,3 +1,5 @@
+@import 'src/sass/vars'
+
 .wrapperDatePicker
   display: flex
   justify-content: center
@@ -8,20 +10,20 @@
 
 .fieldset
   height: 2rem
-  border-radius: 3px
-  border: 1px solid #afafaf
-  cursor: text
+  border-radius: $border-radius
+  border: $border-base
+  cursor: pointer
 
   &:focus
-    border-color: #109bf8
+    border-color: $primary
 
     .legend
-      color: #109bf8
+      color: $primary
 
 .legend
   font-size: .9rem
   padding: 0 6px
-  color: #696969
+  color: $dimgray
 
 .input
   width: calc(100% - 3rem)
@@ -29,6 +31,7 @@
   font-size: .95rem
   position: absolute
   top: 21px
+  cursor: pointer
 
   &:hover, &:focus
     border: none

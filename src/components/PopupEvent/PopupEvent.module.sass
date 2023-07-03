@@ -1,15 +1,17 @@
+@import 'src/sass/vars'
+
 .wrapper
   width: 25rem
   height: 15rem
-  background: white
-  border: 1px solid #bebfbf
-  border-radius: 3px
+  background-color: $white
+  border: $border-base
+  border-radius: $border-radius
   position: absolute
   top: 6rem
   display: none
   flex-direction: column
   padding: 1rem
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.35)
+  box-shadow: $box-shadow-modal
   transition: .4s
 
   &.oneError
@@ -22,27 +24,27 @@
   display: flex
 
 .arrow
-  border: solid #bebfbf
+  border: $border-base
   border-width: 0 1px 1px 0
   padding: 7px
   position: relative
-  background: white
+  background-color: $white
   width: 0px
   transform: rotate(-135deg)
   top: -25px
   left: 15px
 
 .cancel
-  background: transparent
+  background-color: transparent
   border: none
   cursor: pointer
   outline: none
   font-size: 1.3rem
-  color: #bebfbf
+  color: $border-color-base
   align-self: flex-end
 
   &:hover
-    color: #636363
+    color: $cancel-color-hover
 
 .content
   padding: 1rem 1.5rem
@@ -61,12 +63,12 @@
   & > *:nth-child(2)
     margin-bottom: 0.4rem
 
-.wrapperButton
+.actions
   display: flex
   padding: 0 1.5rem
 
 .errorPrompt
-  color: red
+  color: $danger
   margin-top: 0
   margin-bottom: .4rem
   animation: hide .4s

@@ -1,69 +1,71 @@
+@import 'src/sass/vars'
+
 .btn
-  background: white
-  border-radius: 3px
-  border: 1px solid #bebfbf
+  background-color: $white
+  border-radius: $border-radius
+  border: $border-base
   cursor: pointer
   outline: none
   font-size: 1rem
   padding: 6px 18px
 
   &:hover
-    background-color: #e8e8e8
+    background-color: $btn-bg-color-hover
 
   &:active
-    background-color: #dcdcdc
-    border-color: #a2a2a2
+    background-color: $btn-bg-color-active
+    border-color: $silver
 
   &:focus
-    box-shadow: 0 0 0 1px #a2a2a2
+    box-shadow: $box-shadow-size $silver
 
   &:not(:last-child)
     margin-right: 1rem
 
   &.danger
-    background-color: #ff1212
-    color: white
-    border-color: #a70606
+    background-color: $danger
+    color: $white
+    border-color: $btn-border-color-danger
 
     &:hover
-      background-color: #d71313
+      background-color: $btn-bg-danger-hover
 
     &:active
-      background-color: #c00d0d
-      border-color: #b71010
+      background-color: $btn-bg-danger-active
+      border-color: $btn-border-color-danger-active
 
     &:focus
-      box-shadow: 0 0 0 1px #b71010
+      box-shadow: $box-shadow-size $btn-border-color-danger-active
 
   &.success
-    background-color: #27ff00
-    color: white
-    border-color: #03d700
+    background-color: $success
+    color: $white
+    border-color: $btn-border-color-success
 
     &:hover
-      background-color: #1dcf2c
+      background-color: $btn-bg-color-success-hover
 
     &:active
-      background-color: #2bbb37
-      border-color: #19a119
+      background-color: $btn-bg-color-success-active
+      border-color: $btn-border-color-success-active
 
     &:focus
-      box-shadow: 0 0 0 1px #19a119
+      box-shadow: $box-shadow-size $btn-border-color-success-active
 
   &.primary
-    background-color: #109bf8
-    color: white
-    border: 1px solid #109bf8
+    background-color: $primary
+    color: $white
+    border: $border-width-base $border-style-base $btn-border-color-primary
 
     &:hover
-      background-color: #0d7bc4
+      background-color: $btn-bg-color-primary-hover
 
     &:active
-      background-color: #0d5ca2
-      border-color: #0c5596
+      background-color: $btn-bg-color-primary-active
+      border-color: $btn-border-color-primary-active
 
     &:focus
-      box-shadow: 0 0 0 3px #7fbbe6
+      box-shadow: $box-shadow-size $sub-primary
 
 .icon
   width: 14px

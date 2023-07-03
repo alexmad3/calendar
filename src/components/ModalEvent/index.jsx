@@ -86,7 +86,7 @@ const ModalEvent = props => {
 
   return (
     <div  className={cx({
-            externalModalBackground: true,
+            overlay: true,
             visible: props.isVisible
           })}
     >
@@ -157,7 +157,7 @@ const ModalEvent = props => {
           </p>
         </div>
 
-        <div className={styles.wrapperButtons}>
+        <div className={styles.actions}>
           {
             !(props.activeCell === props.events[date]?.date || date === props.events[date]?.date) ?
               <ButtonIcon className='success'
