@@ -3,16 +3,16 @@
   "version": "0.3.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^12.1.4",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
-    "classnames": "^2.3.1",
-    "react": "^18.0.0",
-    "react-datepicker": "^4.7.0",
-    "react-dom": "^18.0.0",
-    "react-redux": "^7.2.8",
-    "react-scripts": "5.0.0",
-    "redux": "^4.1.2",
+    "classnames": "^2.3.2",
+    "react": "^18.2.0",
+    "react-datepicker": "^4.15.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^7.2.9",
+    "react-scripts": "^5.0.0",
+    "redux": "^4.2.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -40,6 +40,6 @@
     ]
   },
   "devDependencies": {
-    "sass": "^1.50.0"
+    "sass": "^1.63.6"
   }
 }
