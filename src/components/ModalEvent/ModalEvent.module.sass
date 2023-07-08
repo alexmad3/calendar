@@ -10,7 +10,7 @@
   z-index: 1
 
 .wrapper
-  width: 32rem
+  width: 35rem
   height: 28rem
   background-color: $white
   border: $border-base
@@ -31,17 +31,18 @@
   display: flex
 
 .cancel
-  background-color: transparent
-  border: none
-  cursor: pointer
-  outline: none
-  font-size: 1.3rem
-  color: $border-color-base
   align-self: flex-end
-  padding: 1px 3px
+
+.canselIcon
+  stroke: currentColor
 
   &:hover
     color: $cancel-color-hover
+
+.icon
+  stroke: currentColor
+  fill: transparent
+  font-size: 24px
 
 .content
   padding: 1rem 1.5rem
@@ -70,7 +71,6 @@
   resize: none
   border: $border-base
   border-radius: $border-radius
-  font-family: Georgia, 'Times New Roman', Times, serif
   font-size: 1rem
   padding: 3px 10px
   outline: none
@@ -82,6 +82,7 @@
 .actions
   padding: 0 1.5rem
   display: flex
+  column-gap: 12px
 
 .errorPrompt
   color: $danger

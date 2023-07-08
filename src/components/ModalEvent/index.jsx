@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { visibleModalEvent, setActiveCell } from '../../redux/actions/modalEvent';
 import { createEvent, editEvent, removeEvent } from '../../redux/actions/events';
-import { ButtonIcon } from '../../common/ButtonIcon';
+import { Button } from '../../common/Button';
 import { Input } from '../../common/Input';
 import { CustomDatePicker } from '../../common/CustomDatePicker';
 import { dateToNumDate } from '../../utilities';
@@ -85,73 +85,79 @@ const ModalEvent = props => {
   const onEditEvent = () => onSubmit('editEvent');
 
   return (
-    <div  className={cx({
-            overlay: true,
-            visible: props.isVisible
-          })}
+    <div
+      className={cx({
+        overlay: true,
+        visible: props.isVisible
+      })}
     >
-      <div  className={cx({
-              wrapper: true,
-              oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
-              errors: eventEmpty && eventExists
-            })}
+      <div
+        className={cx({
+          wrapper: true,
+          oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
+          errors: eventEmpty && eventExists
+        })}
       >
-        <div  className={cx({
-                arrow: true
-              })}
-        ></div>
+        <Button
+          className={styles.cancel}
+          colorScheme='transparent'
+          icon='close16'
+          iconClass={styles.canselIcon}
+          onClick={onClose}
+        />
 
-        <button className={styles.cancel}
-                onClick={onClose}
+        <div
+          className={cx({
+            content: true,
+            oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
+            errors: eventEmpty && eventExists
+          })}
         >
-          <i className='fa fa-times'></i>
-        </button>
-
-        <div  className={cx({
-                content: true,
-                oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
-                errors: eventEmpty && eventExists
-              })}
-        >
-          <Input  className={styles.field}
-                  placeholder='Событие'
-                  value={event}
-                  onChange={onChangeEventName}
-                  onBlur={onControlEvents}
-                  isError={eventEmpty}
+          <Input
+            className={styles.field}
+            placeholder='Событие'
+            value={event}
+            onChange={onChangeEventName}
+            onBlur={onControlEvents}
+            isError={eventEmpty}
           />
 
-          <CustomDatePicker date={date}
-                            isError={eventExists}
-                            onChange={onChangeEventDate}
+          <CustomDatePicker
+            date={date}
+            isError={eventExists}
+            onChange={onChangeEventDate}
           />
 
-          <Input  className={styles.field}
-                  placeholder='Имена участников'
-                  value={names}
-                  onChange={onChangeEventParticipant}
+          <Input
+            className={styles.field}
+            placeholder='Имена участников'
+            value={names}
+            onChange={onChangeEventParticipant}
           />
 
-          <textarea className={styles.description}
-                    placeholder='Описание'
-                    value={description}
-                    onChange={onChangeEventDescription}
+          <textarea
+            className={styles.description}
+            placeholder='Описание'
+            value={description}
+            onChange={onChangeEventDescription}
           />
 
-          <p  className={cx({
-                errorPrompt: true,
-                showError: eventEmpty,
-                eventEmpty
-              })}
+          <p 
+            className={cx({
+              errorPrompt: true,
+              showError: eventEmpty,
+              eventEmpty
+            })}
           >
             Поле события должно быть заполнено
           </p>
 
-          <p  className={cx({
-                errorPrompt: true,
-                showError: eventExists,
-                eventExists
-              })}
+          <p
+            className={cx({
+              errorPrompt: true,
+              showError: eventExists,
+              eventExists
+            })}
           >
             Событие существует на введенную дату
           </p>
@@ -160,25 +166,34 @@ const ModalEvent = props => {
         <div className={styles.actions}>
           {
             !(props.activeCell === props.events[date]?.date || date === props.events[date]?.date) ?
-              <ButtonIcon className='success'
-                          icon='fa fa-pencil'
-                          text='Создать'
-                          onClick={onCreateEvent}
-              />
+              <Button
+                colorScheme='success'
+                icon='pencil24'
+                iconClass={`${styles.icon} indentRight`}
+                onClick={onCreateEvent}
+              >
+                Создать
+              </Button>
 
                 :
 
-              <ButtonIcon className='primary'
-                          icon='fa fa-cog'
-                          text='Перезаписать'
-                          onClick={onEditEvent}
-              />
+              <Button
+                colorScheme='primary'
+                icon='gear24'
+                iconClass={`${styles.icon} indentRight`}
+                onClick={onEditEvent}
+              >
+                Перезаписать
+              </Button>
           }
 
-          <ButtonIcon icon='fa fa-times'
-                      text='Отменить'
-                      onClick={onClose}
-          />
+          <Button
+            icon='close24'
+            iconClass={`${styles.icon} indentRight`}
+            onClick={onClose}
+          >
+            Отменить
+          </Button>
 
           {
             !(props.activeCell === props.events[date]?.date || date === props.events[date]?.date) ?
@@ -186,11 +201,14 @@ const ModalEvent = props => {
 
                 :
 
-              <ButtonIcon className='danger'
-                          icon='fa fa-trash'
-                          text='Удалить'
-                          onClick={onRemove}
-              />
+              <Button
+                colorScheme='danger'
+                icon='trash24'
+                iconClass={`${styles.icon} indentRight`}
+                onClick={onRemove}
+              >
+                Удалить
+              </Button>
           }
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { createEvent, editEvent } from '../../redux/actions/events';
-import { ButtonIcon } from '../../common/ButtonIcon';
+import { Button } from '../../common/Button';
 import { Input } from '../../common/Input';
 import { CustomDatePicker } from '../../common/CustomDatePicker';
 import { dateToNumDate } from '../../utilities';
@@ -75,67 +75,88 @@ const PopupEvent = props => {
   }, [props.active, clearValue]);
 
   return (
-    <div  className={cx({
-            wrapper: true,
-            active: props.active,
-            oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
-            errors: eventEmpty && eventExists
-    })}>
+    <div
+      className={cx({
+        wrapper: true,
+        active: props.active,
+        oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
+        errors: eventEmpty && eventExists
+      })}
+    >
       <div className={styles.arrow}></div>
 
-      <button className={styles.cancel}
-              onClick={onClose}
+      <Button
+        className={styles.cancel}
+        colorScheme='transparent'
+        icon='close16'
+        iconClass={styles.cancelIcon}
+        onClick={onClose}
+      />
+
+      <div
+        className={cx({
+          content: true,
+          oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
+          errors: eventEmpty && eventExists
+        })}
       >
-        <i className='fa fa-times'></i>
-      </button>
-
-      <div  className={cx({
-              content: true,
-              oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
-              errors: eventEmpty && eventExists
-      })}>
-        <Input  placeholder='Событие'
-                value={event}
-                onChange={onChangeEventName}
-                onBlur={onControlEvents}
-                isError={eventEmpty}
+        <Input
+          placeholder='Событие'
+          value={event}
+          onChange={onChangeEventName}
+          onBlur={onControlEvents}
+          isError={eventEmpty}
         />
 
-        <CustomDatePicker date={date}
-                          isError={eventExists}
-                          onChange={onChangeEventDate}
+        <CustomDatePicker
+          date={date}
+          isError={eventExists}
+          onChange={onChangeEventDate}
         />
 
-        <p  className={cx({
-              errorPrompt: true,
-              showError: eventEmpty,
-              eventEmpty
-        })}>
+        <p
+          className={cx({
+            errorPrompt: true,
+            showError: eventEmpty,
+            eventEmpty
+          })}
+        >
           Поле должно быть заполнено
         </p>
 
-        <p  className={cx({
-              errorPrompt: true,
-              showError: eventExists,
-              eventExists
-        })}>
+        <p
+          className={cx({
+            errorPrompt: true,
+            showError: eventExists,
+            eventExists
+          })}
+        >
           Событие существует на введенную дату
         </p>
-
       </div>
+
       <div className={styles.actions}>
-        <ButtonIcon className='success'
-                    icon='fa fa-pencil'
-                    text='Создать'
-                    onClick={onCreateEvent}
-        />
         {
-          eventExists &&
-          <ButtonIcon className='primary'
-                      icon='fa fa-cog'
-                      text='Заменить'
-                      onClick={onEditEvent}
-          />
+          eventExists ?
+            <Button
+              colorScheme='primary'
+              icon='gear24'
+              iconClass={`${styles.icon} indentRight`}
+              onClick={onEditEvent}
+            >
+              Заменить
+            </Button>
+
+              :
+
+            <Button
+              colorScheme='success'
+              icon='pencil24'
+              iconClass={`${styles.icon} indentRight`}
+              onClick={onCreateEvent}
+            >
+              Создать
+            </Button>
         }
       </div>
     </div>

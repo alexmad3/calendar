@@ -14,8 +14,9 @@ const MainContent = ({ visibleModalEvent, isVisibleModalEvent}) => {
     <div className={styles.container}>
       <Calendar onClickCell={onClickCell} />
 
-      <ModalEvent isVisible={isVisibleModalEvent}
-                  close={onClickCell}
+      <ModalEvent
+        isVisible={isVisibleModalEvent}
+        close={onClickCell}
       />
     </div>
   );

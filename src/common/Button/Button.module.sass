@@ -1,29 +1,109 @@
 @import 'src/sass/vars'
 
 .button
-  padding: 9px 18px
+  display: inline-flex
+  align-items: center
+  border-radius: $border-radius
+  border-width: $border-width-base
+  border-style: $border-style-base
+  cursor: pointer
+  outline: none
+
+.base
+  background-color: $white
+  border-color: $border-color-base
+
+  &:hover
+    background-color: $btn-bg-color-hover
+
+  &:active,
+  &.active
+    background-color: $btn-bg-color-active
+    border-color: $silver
+
+  &:focus
+    box-shadow: $box-shadow-size $silver
+
+  .icon
+    color: $border-color-base
+
+.danger
+  background-color: $danger
+  color: $white
+  border-color: $btn-border-color-danger
+
+  &:hover
+    background-color: $btn-bg-danger-hover
+
+  &:active,
+  &.active
+    background-color: $btn-bg-danger-active
+    border-color: $btn-border-color-danger-active
+
+  &:focus
+    box-shadow: $box-shadow-size $btn-border-color-danger-active
+
+  .icon
+    color: $white
+
+.success
+  background-color: $success
+  color: $white
+  border-color: $btn-border-color-success
+
+  &:hover
+    background-color: $btn-bg-color-success-hover
+
+  &:active,
+  &.active
+    background-color: $btn-bg-color-success-active
+    border-color: $btn-border-color-success-active
+
+  &:focus
+    box-shadow: $box-shadow-size $btn-border-color-success-active
+
+  .icon
+    color: $white
+
+.primary
   background-color: $primary
   color: $white
-  border: $border-width-base $border-style-base $btn-border-color-primary
-  border-radius: $border-radius
-  cursor: pointer
-  transition: $transition
-  font-size: medium
-  font-weight: bold
-  outline: none
+  border-color: $btn-border-color-primary
 
   &:hover
     background-color: $btn-bg-color-primary-hover
 
-  &:active
+  &:active,
+  &.active
     background-color: $btn-bg-color-primary-active
     border-color: $btn-border-color-primary-active
 
   &:focus
     box-shadow: $box-shadow-size $sub-primary
 
-  &:not(:last-child)
-    margin-right: 1rem
+  .icon
+    color: $white
 
-.active
-  background-color: $btn-bg-color-primary-active
+.transparent
+  background-color: transparent
+  border-color: transparent
+
+  &:hover
+    color: $dimgray
+
+  &:active,
+  &.active
+    border-color: $silver
+
+  &:focus
+    box-shadow: inset $box-shadow-size $silver
+
+.size_m
+  font-size: 1rem
+  padding: 6px 18px
+  line-height: 1rem
+
+.size_l
+  font-size: 1.25rem
+  padding: 9px 18px
+  line-height: 1.25rem

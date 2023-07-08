@@ -74,20 +74,22 @@ const Calendar = ({selectedDate, events, activeCell, setDateToPicker, setActiveC
       {
         displayCell.map((el, i) => {
           if (i < 7) {
-            return  <CalendarCell date={+el.date}
-                                  event={el.event}
-                                  activeCell={activeCell}
-                                  onActive={onSelectCell}
-                                  number={i + 1}
-                                  key={+el.date}
+            return  <CalendarCell
+                      date={+el.date}
+                      event={el.event}
+                      activeCell={activeCell}
+                      onActive={onSelectCell}
+                      number={i + 1}
+                      key={+el.date}
                     />
           } else {
-            return  <CalendarCell date={+el.date}
-                                  event={el.event}
-                                  activeCell={activeCell}
-                                  onActive={onSelectCell}
-                                  number={i + 1}
-                                  key={+el.date}
+            return  <CalendarCell
+                      date={+el.date}
+                      event={el.event}
+                      activeCell={activeCell}
+                      onActive={onSelectCell}
+                      number={i + 1}
+                      key={+el.date}
                     />
           }
         })

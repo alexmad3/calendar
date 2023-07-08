@@ -12,12 +12,13 @@ export const CalendarCell = ({date, number, event, activeCell, onActive}) => {
   const onActiveCell = () => onActive(date);
 
   return (
-    <div  className={cx({
-          wrapperCell: true,
-          event: event?.title,
-          activeCell: activeCell === date
-        })}
-          onClick={onActiveCell}
+    <div
+      className={cx({
+        wrapperCell: true,
+        event: event?.title,
+        activeCell: activeCell === date
+      })}
+      onClick={onActiveCell}
     >
       <p className={styles.day}>
         {displayedDate}

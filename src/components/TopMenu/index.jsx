@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Button } from '../../common/Button';
-import { ButtonIcon } from '../../common/ButtonIcon';
 import { Search } from '../Search';
 import PopupEvent from '../PopupEvent';
 import { setSelectedDate } from '../../redux/actions/calendar';
@@ -9,12 +8,12 @@ import { months } from '../../constants';
 import styles from './TopMenu.module.sass';
 
 const TopMenu = ({setSelectedDate, selectedDate}) => {
-  const [activePopup, setActivePopup] = useState(false),
+  const [isActivePopup, setActivePopup] = useState(false),
         [searchValue, setSearchValue] = useState(''),
         [displayDate, setDisplayDate] = useState('');
 
-  const onVisibleShortPopup = () => {
-    setActivePopup(!activePopup);
+  const onVisiblePopupEvent = () => {
+    setActivePopup(!isActivePopup);
   };
 
   const onChangeSearch = value => {
@@ -44,36 +43,53 @@ const TopMenu = ({setSelectedDate, selectedDate}) => {
   return (
     <header>
       <div className={styles.container}>
-        <div>
-          <Button text={'Добавить'}
-                  active={activePopup}
-                  onClick={onVisibleShortPopup}
-          />
+        <div className={styles.actions}>
+          <Button
+            colorScheme='primary'
+            size='l'
+            isActive={isActivePopup}
+            onClick={onVisiblePopupEvent}
+          >
+            Добавить
+          </Button>
 
-          <Button text={'Обновить'}
-                  onClick={() => window.location.reload()}
-          />
+          <Button
+            colorScheme='primary'
+            size='l'
+            onClick={() => window.location.reload()}
+          >
+            Обновить
+          </Button>
         </div>
 
-        <div className={styles.controlButtons}>
-          <ButtonIcon icon='fa fa-caret-left'
-                      onClick={() => changeMonth('-')}
+        <div className={styles.actions}>
+          <Button
+            icon='angle16'
+            iconClass='rotate270'
+            onClick={() => changeMonth('-')}
           />
+
           <span className={styles.date}>{displayDate}</span>
-          <ButtonIcon icon='fa fa-caret-right'
-                      onClick={() => changeMonth('+')}
+
+          <Button
+            icon='angle16'
+            iconClass='rotate90'
+            onClick={() => changeMonth('+')}
           />
-          <ButtonIcon text='Текущий месяц'
-                      onClick={() => changeMonth()}
-          />
+
+          <Button onClick={() => changeMonth()}>
+            Текущий месяц
+          </Button>
         </div>
 
-        <PopupEvent active={activePopup}
-                    onVisible={() => setActivePopup(false)}
+        <PopupEvent
+          active={isActivePopup}
+          onVisible={() => setActivePopup(false)}
         />
 
-        <Search value={searchValue}
-                onChangeSearch={onChangeSearch}
+        <Search
+          value={searchValue}
+          onChangeSearch={onChangeSearch}
         />
       </div>
     </header>
