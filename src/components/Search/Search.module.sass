@@ -1,8 +1,10 @@
 @import 'src/sass/vars'
+@import 'src/index'
 
-.wrapperSearch
+.search
   display: flex
   align-items: center
+  position: relative
 
 .iconSearch
   font-size: 24px
@@ -10,4 +12,51 @@
   stroke: currentColor
 
 .field
-  width: 20rem
+  width: calc( 20rem - 26px )
+  padding-right: 36px
+
+.iconClose
+  display: none
+  position: absolute
+  right: 12px
+  stroke: currentColor
+
+  &:hover
+    color: $cancel-color-hover
+    cursor: pointer
+
+.visibleIconClose
+  display: block
+
+.items
+  max-height: 15rem
+  display: flex
+  flex-direction: column
+  position: absolute
+  top: 3rem
+  left: 2rem
+  row-gap: 2px
+  padding: 3px
+  border-radius: 3px
+  transition: $transition
+  user-select: none
+  background-image: linear-gradient(315deg, #5b6467 0%, #8b939a 74%)
+  @include hidden
+
+.visibleItems
+  @include visible
+
+.item
+  display: block
+  width: calc( 20rem - 6px )
+  padding: 3px 10px
+  border: $border-width-base $border-style-base transparent
+  color: $white
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
+  &:hover:not([data-not-found])
+    border-color: $btn-border-color-primary
+    background-color: $cancel-color-hover
+    cursor: pointer

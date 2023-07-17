@@ -4,6 +4,7 @@
   display: flex
   justify-content: center
   width: 100%
+  user-select: none
 
   & > *:first-child
     width: 10rem
@@ -20,10 +21,16 @@
     .legend
       color: $primary
 
+.errorFieldset
+  border-color: $danger
+
 .legend
   font-size: .9rem
   padding: 0 6px
   color: $dimgray
+
+.errorLegend
+  color: $danger
 
 .input
   width: calc(100% - 3rem)

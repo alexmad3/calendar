@@ -7,6 +7,7 @@ const cx = classNames.bind(styles);
 export const Icon = ({
   name,
   className,
+  onClick,
 }) => {
   const classes = className?.split(' ').reduce((target, key) => {
     target[key] = true;
@@ -14,11 +15,13 @@ export const Icon = ({
   }, {});
 
   return (
-  <svg className={cx({
-    icon: true,
-    ...classes,
-    })
-  }>
+  <svg
+    className={cx({
+      icon: true,
+      ...classes,
+    })}
+    onClick={typeof onClick === 'function' ? () => onClick() : null}
+  >
     <use href={Icons + '#' + name} />
   </svg>
   );

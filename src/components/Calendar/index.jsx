@@ -25,7 +25,7 @@ const Calendar = ({selectedDate, events, activeCell, setDateToPicker, setActiveC
     for (let i = firstDay; i > 1; i--) {
       monthData.push({
         date: new Date(year, month, (i * (-1)) + 2),
-        event: events[+(new Date(year, month, (i * (-1)) + 2))]
+        event: events.find(event => event.date === +(new Date(year, month, (i * (-1)) + 2)))
       });
     }
 
@@ -38,7 +38,7 @@ const Calendar = ({selectedDate, events, activeCell, setDateToPicker, setActiveC
 
         monthData.push({
           date: new Date(year, month, i),
-          event: events[+(new Date(year, month, i))]
+          event: events.find(event => event.date === +(new Date(year, month, i)))
         });
       }
     }
@@ -47,7 +47,7 @@ const Calendar = ({selectedDate, events, activeCell, setDateToPicker, setActiveC
       for (let i = 1; i <= 7 - new Date(year, month, lastDate).getDay(); i++) {
         monthData.push({
           date: new Date(year, month + 1, i),
-          event: events[+(new Date(year, month + 1, i))]
+          event: events.find(event => event.date === +(new Date(year, month + 1, i)))
         });
       }
     }

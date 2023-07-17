@@ -1,4 +1,5 @@
 @import 'src/sass/vars'
+@import 'src/index'
 
 .overlay
   display: none
@@ -9,7 +10,7 @@
   background-color: $overlay
   z-index: 1
 
-.wrapper
+.modal
   width: 35rem
   height: 28rem
   background-color: $white
@@ -33,11 +34,11 @@
 .cancel
   align-self: flex-end
 
-.canselIcon
-  stroke: currentColor
-
-  &:hover
+  &:hover .iconCancel
     color: $cancel-color-hover
+
+.iconCancel
+  stroke: currentColor
 
 .icon
   stroke: currentColor
@@ -72,6 +73,9 @@
   border: $border-base
   border-radius: $border-radius
   font-size: 1rem
+  font-family: Georgia, 'Times New Roman', Times, serif
+  letter-spacing: .25px
+  line-height: 1.5rem
   padding: 3px 10px
   outline: none
   transition: $transition
@@ -88,30 +92,15 @@
   color: $danger
   margin-top: 0
   margin-bottom: .4rem!important
-  animation: hide .4s
-  animation-fill-mode: forwards
-  transform-origin: top
-  display: none
+  height: 0
+  visibility: hidden
+  transform: scaleY(0)
 
   &:last-child
     margin-bottom: 0
 
 .showError
-  animation: show .4s
-  animation-fill-mode: forwards
-  display: block
+  @include visible
 
-@keyframes hide
-  0%
-    transform: scaleY(1)
-
-  100%
-    transform: scaleY(0)
-    display: none
-
-@keyframes show
-  0%
-    transform: scaleY(0)
-
-  100%
-    transform: scaleY(1)
+.hidingError
+  @include hidden

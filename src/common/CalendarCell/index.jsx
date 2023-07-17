@@ -14,9 +14,9 @@ export const CalendarCell = ({date, number, event, activeCell, onActive}) => {
   return (
     <div
       className={cx({
-        wrapperCell: true,
+        cell: true,
         event: event?.title,
-        activeCell: activeCell === date
+        active: activeCell === date
       })}
       onClick={onActiveCell}
     >

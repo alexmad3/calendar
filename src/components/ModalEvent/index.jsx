@@ -12,37 +12,49 @@ import styles from './ModalEvent.module.sass';
 const cx = classNames.bind(styles);
 
 const ModalEvent = props => {
-  const [event, setEvent] = useState(''),
+  const [currentEvent, setCurrentEvent] = useState({}),
+        [event, setEvent] = useState(''),
         [date, setDate] = useState(dateToNumDate()),
         [names, setNames] = useState(''),
         [description, setDescription] = useState(''),
         [eventEmpty, setEventEmpty] = useState(false),
-        [eventExists, setEventExists] = useState(false);
+        [eventExists, setEventExists] = useState(false),
+        [hidingEmpty, setHidingEmpty] = useState(false),
+        [hidingExists, setHidingExists] = useState(false);
 
-  const updateStateInputs = useCallback(() => {
-    setEvent(props.events[props.dateToPicker]?.title || '');
-    setDate(dateToNumDate(props.dateToPicker));
-    setNames(props.events[props.dateToPicker]?.names || '');
-    setDescription(props.events[props.dateToPicker]?.description || '');
-  }, [props.events, props.dateToPicker]);
+  const updateStates = useCallback(date => {
+    setCurrentEvent(props.events.find(event => event.date === date));
+    setEvent((props.events.find(event => event.date === date))?.title || '');
+    setDate(dateToNumDate(date));
+    setNames((props.events.find(event => event.date === date))?.names || '');
+    setDescription((props.events.find(event => event.date === date))?.description || '');
+  }, [props.events]);
 
   useEffect(() => {
     if (props.activeCell) {
-      updateStateInputs();
+      updateStates(props.dateToPicker);
     }
-  }, [updateStateInputs, props.activeCell]);
+  }, [updateStates, props.activeCell, props.dateToPicker]);
 
   const checkEmptiness = (name, setError) =>
     name.trim() ? setError(false) : setError(true);
 
   const checkedEventExists = (newDate = date) => {
     const newParseDate = dateToNumDate(newDate);
-    props.events[newParseDate] ? setEventExists(true) : setEventExists(false);
+    setCurrentEvent(props.events.find(event => event.date === newParseDate));
+    if (props.events.find(event => event.date === newParseDate)) {
+      setEventExists(true);
+      setHidingExists(true);
+    } else {
+      setEventExists(false);
+    }
   };
 
   const onClose = () => {
     setEventEmpty(false);
     setEventExists(false);
+    setHidingEmpty(false);
+    setHidingExists(false);
     props.visibleModalEvent(false);
     props.setActiveCell(null);
   };
@@ -67,16 +79,19 @@ const ModalEvent = props => {
     onClose();
   };
 
-  const onChangeEventName = (_name, value) => setEvent(value);
+  const onChangeEventName = value => {
+    setEvent(value);
+    setHidingEmpty(true);
+  };
 
   const onControlEvents = () => checkEmptiness(event, setEventEmpty);
 
   const onChangeEventDate = newDate => {
-    setDate(dateToNumDate(newDate));
+    updateStates(dateToNumDate(newDate));
     checkedEventExists(dateToNumDate(newDate));
   };
 
-  const onChangeEventParticipant = (_name, value) => setNames(value);
+  const onChangeEventParticipant = value => setNames(value);
 
   const onChangeEventDescription = e => setDescription(e.target.value);
 
@@ -93,7 +108,7 @@ const ModalEvent = props => {
     >
       <div
         className={cx({
-          wrapper: true,
+          modal: true,
           oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
           errors: eventEmpty && eventExists
         })}
@@ -102,7 +117,7 @@ const ModalEvent = props => {
           className={styles.cancel}
           colorScheme='transparent'
           icon='close16'
-          iconClass={styles.canselIcon}
+          iconClass={styles.iconCancel}
           onClick={onClose}
         />
 
@@ -142,11 +157,11 @@ const ModalEvent = props => {
             onChange={onChangeEventDescription}
           />
 
-          <p 
+          <p
             className={cx({
               errorPrompt: true,
               showError: eventEmpty,
-              eventEmpty
+              hidingError: !eventEmpty && hidingEmpty
             })}
           >
             Поле события должно быть заполнено
@@ -156,7 +171,7 @@ const ModalEvent = props => {
             className={cx({
               errorPrompt: true,
               showError: eventExists,
-              eventExists
+              hidingError: !eventExists && hidingExists
             })}
           >
             Событие существует на введенную дату
@@ -165,7 +180,7 @@ const ModalEvent = props => {
 
         <div className={styles.actions}>
           {
-            !(props.activeCell === props.events[date]?.date || date === props.events[date]?.date) ?
+            !(props.activeCell === currentEvent?.date || date === currentEvent?.date) ?
               <Button
                 colorScheme='success'
                 icon='pencil24'
@@ -196,7 +211,7 @@ const ModalEvent = props => {
           </Button>
 
           {
-            !(props.activeCell === props.events[date]?.date || date === props.events[date]?.date) ?
+            !(props.activeCell === currentEvent?.date || date === currentEvent?.date) ?
               null
 
                 :

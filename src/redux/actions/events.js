@@ -1,4 +1,9 @@
-import { CREATE_EVENT, EDIT_EVENT, REMOVE_EVENT, GET_EVENTS } from "../types";
+import {
+  CREATE_EVENT,
+  EDIT_EVENT,
+  REMOVE_EVENT,
+  GET_EVENTS
+} from "../types";
 
 export const createEvent = event => ({
   type: CREATE_EVENT,

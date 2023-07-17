@@ -1,4 +1,8 @@
-import { VISIBLE_MODAL_EVENT, ACTIVE_CELL, SET_DATE_TO_PICKER } from "../types";
+import {
+  VISIBLE_MODAL_EVENT,
+  ACTIVE_CELL,
+  SET_DATE_TO_PICKER
+} from "../types";
 
 export const visibleModalEvent = bool => ({
   type: VISIBLE_MODAL_EVENT,

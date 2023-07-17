@@ -18,3 +18,37 @@ body
 
 .indentLeft
   margin-left: .5rem
+
+@mixin visible
+  visibility: visible
+  animation: show .4s
+  animation-fill-mode: none
+  height: auto
+  transform: scaleY(1)
+
+@mixin hidden
+  visibility: hidden
+  animation: hide .4s
+  animation-fill-mode: none
+  transform-origin: top
+  height: 0
+  transform: scaleY(0)
+
+@keyframes hide
+  0%
+    transform: scaleY(1)
+    height: auto
+    visibility: visible
+
+  100%
+    transform: scaleY(0)
+    height: 0
+
+@keyframes show
+  0%
+    transform: scaleY(0)
+    height: 0
+
+  100%
+    transform: scaleY(1)
+    height: auto

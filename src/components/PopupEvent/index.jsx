@@ -14,7 +14,9 @@ const PopupEvent = props => {
   const [event, setEvent] = useState(''),
         [eventEmpty, setEventEmpty] = useState(false),
         [date, setDate] = useState(dateToNumDate()),
-        [eventExists, setEventExists] = useState(false);
+        [eventExists, setEventExists] = useState(false),
+        [hidingEmpty, setHidingEmpty] = useState(false),
+        [hidingExists, setHidingExists] = useState(false);
 
   const onSubmit = method => {
     checkEmptiness();
@@ -42,10 +44,18 @@ const PopupEvent = props => {
 
   const checkedEventExists = (newDate = date) => {
     const newPatseDate = dateToNumDate(newDate);
-    props.events[newPatseDate] ? setEventExists(true) : setEventExists(false);
+    if (props.events.find(event => event.date === newPatseDate)) {
+      setEventExists(true);
+      setHidingExists(true);
+    } else {
+      setEventExists(false);
+    }
   };
 
-  const onChangeEventName = (_name, value) => setEvent(value);
+  const onChangeEventName = value => {
+    setEvent(value);
+    setHidingEmpty(true);
+  };
 
   const onControlEvents = () => {
     checkEmptiness();
@@ -66,6 +76,8 @@ const PopupEvent = props => {
 
   const onClose = () => {
     props.onVisible();
+    setHidingEmpty(false);
+    setHidingExists(false);
     clearValue();
   };
 
@@ -77,7 +89,7 @@ const PopupEvent = props => {
   return (
     <div
       className={cx({
-        wrapper: true,
+        popup: true,
         active: props.active,
         oneError: (eventEmpty && !eventExists) || (!eventEmpty && eventExists),
         errors: eventEmpty && eventExists
@@ -89,7 +101,7 @@ const PopupEvent = props => {
         className={styles.cancel}
         colorScheme='transparent'
         icon='close16'
-        iconClass={styles.cancelIcon}
+        iconClass={styles.iconCancel}
         onClick={onClose}
       />
 
@@ -118,7 +130,7 @@ const PopupEvent = props => {
           className={cx({
             errorPrompt: true,
             showError: eventEmpty,
-            eventEmpty
+            hidingError: !eventEmpty && hidingEmpty
           })}
         >
           Поле должно быть заполнено
@@ -128,7 +140,7 @@ const PopupEvent = props => {
           className={cx({
             errorPrompt: true,
             showError: eventExists,
-            eventExists
+            hidingError: !eventExists && hidingExists
           })}
         >
           Событие существует на введенную дату

@@ -1,42 +1,48 @@
-import { CREATE_EVENT, EDIT_EVENT, REMOVE_EVENT, GET_EVENTS } from "../types";
+import {
+  CREATE_EVENT,
+  EDIT_EVENT,
+  REMOVE_EVENT,
+  GET_EVENTS
+} from "../types";
 
 const initialState = {
-  events: {
-    1649365200000: {
+  events: [
+    {
       title: 'title',
       date: 1649365200000,
       names: 'Влад, Педро',
       description: 'Четкая встреча',
     },
-    1649538000000: {
+    {
       title: 'Встреча 2',
       date: 1605387500000,
       names: 'Влад, Педро',
       description: 'Четкая встреча 2',
     }
-  }
+  ]
 };
 
 export const events = (state = initialState, action) => {
+  const newStateEvents = [...state.events];
+
   switch (action.type) {
     case CREATE_EVENT:
       localStorage.setItem('events',
-        JSON.stringify({...state.events, [action.payload.date]: action.payload}));
-      return { ...state, events: {...state.events, [action.payload.date]: action.payload} };
+        JSON.stringify([...state.events, action.payload]));
+      return { ...state, events: [...state.events, action.payload] };
 
     case EDIT_EVENT:
-      localStorage.setItem('events',
-        JSON.stringify({...state.events, [action.payload.date]: action.payload}));
-      return { ...state, events: {...state.events, [action.payload.date]: action.payload} };
+      newStateEvents.splice(newStateEvents.findIndex(event => event.date === action.payload.date), 1, action.payload);
+      localStorage.setItem('events', JSON.stringify(newStateEvents));
+      return { ...state, events: newStateEvents };
 
     case REMOVE_EVENT:
-      const newState = {...state.events};
-      delete newState[action.payload];
-      localStorage.setItem('events', JSON.stringify(newState));
-      return { ...state, events: newState };
+      newStateEvents.splice(newStateEvents.findIndex(event => event.date === action.payload), 1);
+      localStorage.setItem('events', JSON.stringify(newStateEvents));
+      return { ...state, events: newStateEvents };
 
     case GET_EVENTS:
-      return { ...state, events: (JSON.parse(localStorage.getItem('events')) || {}) };
+      return { ...state, events: (JSON.parse(localStorage.getItem('events')) || []) };
 
     default:
       return state;

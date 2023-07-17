@@ -1,20 +1,27 @@
 import React, { forwardRef } from 'react';
+import classNames from 'classnames/bind';
 import DatePicker from 'react-datepicker';
 import { Icon } from '../Icon';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './CustomDatePicker.module.sass';
 
+const cx = classNames.bind(styles);
+
 export const CustomDatePicker = ({date, onChange, isError}) => {
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
     <fieldset
-      className={styles.fieldset}
-      style={isError ? {borderColor: 'red'} : null}
+      className={cx({
+        fieldset: true,
+        errorFieldset: isError
+      })}
       onClick={onClick}
       tabIndex='0'
     >
       <legend
-        className={styles.legend}
-        style={isError ? {color: 'red'} : null}
+        className={cx({
+          legend: true,
+          errorLegend: isError
+        })}
       >
         Дата
       </legend>

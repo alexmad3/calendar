@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Button } from '../../common/Button';
-import { Search } from '../Search';
+import Search from '../Search';
 import PopupEvent from '../PopupEvent';
 import { setSelectedDate } from '../../redux/actions/calendar';
 import { months } from '../../constants';
@@ -9,15 +9,10 @@ import styles from './TopMenu.module.sass';
 
 const TopMenu = ({setSelectedDate, selectedDate}) => {
   const [isActivePopup, setActivePopup] = useState(false),
-        [searchValue, setSearchValue] = useState(''),
         [displayDate, setDisplayDate] = useState('');
 
   const onVisiblePopupEvent = () => {
     setActivePopup(!isActivePopup);
-  };
-
-  const onChangeSearch = value => {
-    setSearchValue(value);
   };
 
   const setterDisplayDate = useCallback((date = new Date()) => {
@@ -87,10 +82,7 @@ const TopMenu = ({setSelectedDate, selectedDate}) => {
           onVisible={() => setActivePopup(false)}
         />
 
-        <Search
-          value={searchValue}
-          onChangeSearch={onChangeSearch}
-        />
+        <Search />
       </div>
     </header>
   );

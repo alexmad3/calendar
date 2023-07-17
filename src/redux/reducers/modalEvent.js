@@ -1,4 +1,8 @@
-import { ACTIVE_CELL, VISIBLE_MODAL_EVENT, SET_DATE_TO_PICKER } from "../types";
+import {
+  ACTIVE_CELL,
+  VISIBLE_MODAL_EVENT,
+  SET_DATE_TO_PICKER
+} from "../types";
 
 const initialState = {
   isVisible: false,

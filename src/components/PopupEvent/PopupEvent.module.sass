@@ -1,6 +1,7 @@
 @import 'src/sass/vars'
+@import 'src/index'
 
-.wrapper
+.popup
   width: 25rem
   height: 15rem
   background-color: $white
@@ -37,11 +38,11 @@
 .cancel
   align-self: flex-end
 
-.cancelIcon
-  stroke: currentColor
-
-  &:hover
+  &:hover .iconCancel
     color: $cancel-color-hover
+
+.iconCancel
+  stroke: currentColor
 
 .icon
   stroke: currentColor
@@ -73,30 +74,15 @@
   color: $danger
   margin-top: 0
   margin-bottom: .4rem
-  animation: hide .4s
-  animation-fill-mode: forwards
-  transform-origin: top
-  display: none
+  height: 0
+  visibility: hidden
+  transform: scaleY(0)
 
   &:last-child
     margin-bottom: 0
 
 .showError
-  animation: show .4s
-  animation-fill-mode: forwards
-  display: block
+  @include visible
 
-@keyframes hide
-  0%
-    transform: scaleY(1)
-
-  100%
-    transform: scaleY(0)
-    display: none
-
-@keyframes show
-  0%
-    transform: scaleY(0)
-
-  100%
-    transform: scaleY(1)
+.hidingError
+  @include hidden
